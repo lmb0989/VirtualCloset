@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="VirtualCloset"
+  id="myeclipse.1425906383044"
+  context-root="/VirtualCloset"
+  j2ee-spec="5.0"
+  archive="VirtualCloset.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+
