@@ -1,4 +1,4 @@
-package com.database.dbdao;
+package com.virtualcloset.dbdao;
 
 import java.beans.PropertyVetoException;
 import java.sql.Connection;
@@ -7,22 +7,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.virtualcloset.config.DBConfig;
 
 public class ConnDBC3P0 {
 	
-	private String username = "root";
-	private String password = "12345";
-	private String url = "jdbc:mysql://localhost:3306/digtalkindergarten";
-	private String classname = "com.mysql.jdbc.Driver";
-	
 	private ComboPooledDataSource cpds = null;
+	
 	private ConnDBC3P0(){
 		cpds = new ComboPooledDataSource();
-		cpds.setUser(username);
-		cpds.setPassword(password);
-		cpds.setJdbcUrl(url);
+		cpds.setUser(DBConfig.username);
+		cpds.setPassword(DBConfig.password);
+		cpds.setJdbcUrl(DBConfig.url);
 		try {
-			cpds.setDriverClass(classname);
+			cpds.setDriverClass(DBConfig.classname);
 		} catch (PropertyVetoException e) {
 			e.printStackTrace();
 		}
