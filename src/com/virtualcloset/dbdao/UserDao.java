@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.virtualcloset.config.UserConfig;
 import com.virtualcloset.model.UserBean;
 
 public class UserDao {
@@ -18,26 +19,26 @@ public class UserDao {
 		stmt = ConnDBC3P0.createStmt(conn);
 	}
 	
-	public int login(UserBean user) throws SQLException{
+	public static int login(UserBean user) throws SQLException{
 		if(!isUserNameExist(user.getUserName())){
-			return UserBean.USERNOTEXIST;
+			return UserConfig.MESSAGE_USERNOTEXIST;
 		}
 		initConnect();
-		String sql = "select * from user where username="+user.getUserName();
+		String sql = "select * from user where username='"+user.getUserName()+"'";
 		rs = ConnDBC3P0.exetQuery(stmt, sql);
 		while(rs.next()){
 			if(!rs.getString("password").equals(user.getPassword())){
-				return UserBean.PASSWRONG;
+				return UserConfig.MESSAGE_PASSWRONG;
 			}
 		}
 		close();
-		return UserBean.LOGINSUCCESS;
+		return UserConfig.MESSAGE_LOGINSUCCESS;
 	}
 	
 	public static boolean isUserNameExist(String userName) throws SQLException{
 		boolean isExist = false;
 		initConnect();
-		String sql = "select * from user where username="+userName;
+		String sql = "select * from user where username='"+userName+"'";
 		rs = ConnDBC3P0.exetQuery(stmt, sql);
 		while(rs.next()){
 			isExist = true;
@@ -53,6 +54,7 @@ public class UserDao {
 				return true;
 			}
 		}
+		close();
 		return false;
 	}
 	
@@ -63,26 +65,18 @@ public class UserDao {
 				return true;
 			}
 		}
+		close();
 		return false;
 	}
 	
-	public static String getUserName(String userEmail) throws SQLException{
+	public static String getUserName(String userEmailORPhone, String type) throws SQLException{
 		ResultSet rs = getAllUser();
 		while(rs.next()){
-			if(rs.getString("email").equals(userEmail)){
+			if(rs.getString(type).equals(userEmailORPhone)){
 				return rs.getString("username");
 			}
 		}
-		return null;
-	}
-	
-	public static String getUserName(int userPhone) throws SQLException{
-		ResultSet rs = getAllUser();
-		while(rs.next()){
-			if(rs.getInt("phone") == userPhone){
-				return rs.getString("username");
-			}
-		}
+		close();
 		return null;
 	}
 	
@@ -90,7 +84,6 @@ public class UserDao {
 		initConnect();
 		String sql = "select * from user";
 		rs = ConnDBC3P0.exetQuery(stmt, sql);
-		close();
 		return rs;
 	}
 	
