@@ -7,9 +7,9 @@ public class UserBean {
 	private String userName;
 	private String password;
 	private String email;
-	private int phone;
+	private String phone;
 	private String sex;
-	private Date birthday;
+	private int age;
 	private String job;
 	private String image;
 	
@@ -31,10 +31,10 @@ public class UserBean {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public int getPhone() {
+	public String getPhone() {
 		return phone;
 	}
-	public void setPhone(int phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 	public String getSex() {
@@ -43,11 +43,11 @@ public class UserBean {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-	public Date getAge() {
-		return birthday;
+	public int getAge() {
+		return age;
 	}
-	public void setAge(Date birthday) {
-		this.birthday = birthday;
+	public void setAge(int age) {
+		this.age = age;
 	}
 	public String getJob() {
 		return job;

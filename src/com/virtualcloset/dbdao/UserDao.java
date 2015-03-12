@@ -21,18 +21,18 @@ public class UserDao {
 	
 	public static int login(UserBean user) throws SQLException{
 		if(!isUserNameExist(user.getUserName())){
-			return UserConfig.MESSAGE_USERNOTEXIST;
+			return UserConfig.LOGIN_MESSAGE_USERNOTEXIST;
 		}
 		initConnect();
 		String sql = "select * from user where username='"+user.getUserName()+"'";
 		rs = ConnDBC3P0.exetQuery(stmt, sql);
 		while(rs.next()){
 			if(!rs.getString("password").equals(user.getPassword())){
-				return UserConfig.MESSAGE_PASSWRONG;
+				return UserConfig.LOGIN_MESSAGE_PASSWRONG;
 			}
 		}
 		close();
-		return UserConfig.MESSAGE_LOGINSUCCESS;
+		return UserConfig.LOGIN_MESSAGE_LOGINSUCCESS;
 	}
 	
 	public static boolean isUserNameExist(String userName) throws SQLException{
@@ -85,6 +85,26 @@ public class UserDao {
 		String sql = "select * from user";
 		rs = ConnDBC3P0.exetQuery(stmt, sql);
 		return rs;
+	}
+	
+	public static int regUser(UserBean user){
+		initConnect();
+		StringBuilder sb = new StringBuilder();
+		sb.append("insert  into user values ('").append(user.getUserName()).append("','").append(user.getPassword()).append("'");
+		if(user.getEmail() == null){
+			close();
+			return UserConfig.REG_MESSAGE_EMAILEXIST;
+		}else{
+			sb.append(",'").append(user.getEmail()).append("','");
+//		}
+		
+		sb.append(")");
+		String sql = "insert  into user values ('"+userName+"','"+passWord+"')";
+		
+		
+		int res = ConnDBC3P0.exetUpdate(stmt, sql);
+		close();
+		return res==0;
 	}
 	
 	public static void close(){

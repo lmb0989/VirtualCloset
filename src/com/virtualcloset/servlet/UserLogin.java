@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONHander;
+
 import com.virtualcloset.config.UserConfig;
 import com.virtualcloset.dbdao.UserDao;
 import com.virtualcloset.model.UserBean;
@@ -18,17 +20,16 @@ public class UserLogin extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		boolean flag = false;
-		UserBean user = new UserBean();
 		
 		response.setContentType("text/html"); 
 		response.setCharacterEncoding("gbk");
         PrintWriter out = response.getWriter(); 
-        String userName = request.getParameter("username");
-        String passWord  = request.getParameter("password");
         
-        user.setUserName(userName);
-        user.setPassword(passWord);
+        String json = request.getParameter("requestJson");
+        JSONHander hander = new JSONHander();
+        UserBean user = hander.getLoginUser(json);
+        
+        String userName = user.getUserName();
         int userType = UserUtil.getUserType(userName);
         int loginResult;
         try {
@@ -37,7 +38,7 @@ public class UserLogin extends HttpServlet {
 	        }else if(userType == UserConfig.USER_TYPE_USEREMAIL){
 	        	userName = UserDao.getUserName(userName, "email");
 	        	if(userName == null){
-	        		loginResult = UserConfig.MESSAGE_USERNOTEXIST;
+	        		loginResult = UserConfig.LOGIN_MESSAGE_USERNOTEXIST;
 	        	}else{
 	        		user.setUserName(userName);
 	        		loginResult = UserDao.login(user);
@@ -45,27 +46,25 @@ public class UserLogin extends HttpServlet {
 	        }else{
 	        	userName = UserDao.getUserName(userName, "phone");
 	        	if(userName == null){
-	        		loginResult = UserConfig.MESSAGE_USERNOTEXIST;
+	        		loginResult = UserConfig.LOGIN_MESSAGE_USERNOTEXIST;
 	        	}else{
 	        		user.setUserName(userName);
 	        		loginResult = UserDao.login(user);
 	        	}
 	        }
         } catch (SQLException e) {
-        	loginResult = UserConfig.MESSAGE_PASSWRONG;
+        	loginResult = UserConfig.LOGIN_MESSAGE_PASSWRONG;
         	e.printStackTrace();
         }
         
-        if(loginResult == UserConfig.MESSAGE_LOGINSUCCESS){
+        if(loginResult == UserConfig.LOGIN_MESSAGE_LOGINSUCCESS){
         	HttpSession session = request.getSession();
         	session.setAttribute("userName", userName);
-        	out.print("登陆成功");
-        }else if(loginResult == UserConfig.MESSAGE_USERNOTEXIST){
-        	out.print("用户不存在");
-        }else{
-        	out.print("密码错误");
+//        	out.print("登陆成功");
         }
-        out.flush();    
+    	out.print(hander.createrLoginMessage(loginResult));
+        
+        out.flush(); 
         out.close();   
 	}
 
