@@ -1,0 +1,104 @@
+基本命令
+
+[ ]中的内容为可选项
+--创建数据库
+mysql> create database 数据库名称
+
+--创建表
+mysql> create table 表名 (
+列的名字（id）类型（int（4））primary key(定义主键) auto_increment（描述 自增），
+……，
+）；
+
+--查看所有数据库
+mysql> show databases ;
+
+--使用某个数据库
+mysql> use 数据库名称；
+
+--查看所使用数据库下所有的表
+mysql> show tables;
+
+--显示表的属性结构
+mysql> desc 表名；
+
+--选择表中数据的显示
+--* 代表选择所有列 ，
+mysql> select * from 表名 where id=?[and name=？] [or name=?];
+mysql> select id,name from 表名order by 某一列的名称 desc(降序，asc为升序)
+
+--删除表中的数据
+mysql> delete from table where id=？[or name=? (and name=?)];
+--将表中记录清空
+mysq> delete from table;
+
+--删除表
+mysql> drop table;
+
+--删除数据库
+mysql> drop database;
+
+--显示最后一个执行的语句所产生的错误、警告和通知：
+mysql> show warnings;
+
+--只显示最后一个执行语句所产生的错误：
+mysql> show errors;
+
+
+------------------------------------------------------------------------------------------------
+【实例】
+drop database if exists school; //如果存在SCHOOL则删除
+create database school; //建立库SCHOOL
+use school; //打开库SCHOOL
+create table teacher //建立表TEACHER
+(
+id int(3) auto_increment not null primary key,
+name char(10) not null,
+address varchar(50) default ‘深圳',
+year date
+); //建表结束
+//以下为插入字段
+insert into teacher values('','glchengang',’XX公司‘，'1976-10-10');
+insert into teacher values('','jack',’XX公司‘，'1975-12-23');
+注：在建表中：
+1．将ID设为长度为3的数字字段：int(3)并让它每个记录自动加一：auto_increment并不能为空：not null而且让他成为主字段primary key。
+2．将NAME设为长度为10的字符字段。
+3．将ADDRESS设为长度50的字符字段，而且缺省值为深圳。varchar和char有什么区别呢，只有等以后的文章再说了。
+4．将YEAR设为日期字段。
+如果你在mysql提示符键入上面的命令也可以，但不方便调试。你可以将以上命令原样写入一个文本文件中假设为school.sql，然后复制到c:\下，并在DOS状态进入目录\mysql\bin，然后键入以下命令：
+mysql -uroot -p密码 < c:\school.sql
+如果成功，空出一行无任何显示；如有错误，会有提示。（以上命令已经调试，你只要将//的注释去掉即可使用）。
+
+
+------------------------------------------------------------------------------------------------
+【MySql AUTO_INCREMENT 简介】
+可使用复合索引在同一个数据表里创建多个相互独立的自增序列，具体做法是这样的：为数据表创建一个由多个数据列组成的PRIMARY KEY OR UNIQUE索引，并把AUTO_INCREMENT数据列包括在这个索引里作为它的最后一个数据列。这样，这个复合索引里，前面的那些数据列每构成一种独一无二的组合，最末尾的AUTO_INCREMENT数据列就会生成一个与该组合相对应的序列编号。 
+    我们经常要用到唯一编号，以标识记录。在MySQL中可通过数据列的AUTO_INCREMENT属性来自动生成。MySQL支持多种数据表，每种数据表的自增属性都有差异，这里将介绍各种数据表里的数据列自增属性。
+
+1 用法:
+CREATE TABLE test
+(
+id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+username varchar(15) NOT NULL,
+password varchar(30) not null
+)AUTO_INCREMENT = 100;
+
+插入用法：
+(1)、mysql> insert into test (username,pawwword) values('animal','dog'),('animal','cat'),
+('bird','penguin'),('fish','lax'),('bird','ostrich'),('animal','whale');
+(2)、mysql> insert into test values(NULL,'liuzhi','123456');
+
+
+可在建表时可用“AUTO_INCREMENT=n”选项来指定一个自增的初始值。
+可用alter table table_name AUTO_INCREMENT=n命令来重设自增的起始值。
+
+说明：
+（1）如果把一个NULL插入到一个AUTO_INCREMENT数据列里去，MySQL将自动生成下一个序列编号。编号从1开始，并1为基数递增。
+
+（2）把0插入AUTO_INCREMENT数据列的效果与插入NULL值一样。但不建议这样做，还是以插入NULL值为好。
+
+（3）当插入记录时，没有为AUTO_INCREMENT明确指定值，则等同插入NULL值。
+
+（4）当插入记录时，如果为AUTO_INCREMENT数据列明确指定了一个数值，则会出现两种情况，情况一，如果插入的值与已有的编号重复，则会出现出错信息，因为AUTO_INCREMENT数据列的值必须是唯一的；情况二，如果插入的值大于已编号的值，则会把该插入到数据列中，并使在下一个编号将从这个新值开始递增。也就是说，可以跳过一些编号。
+
+（5）如果用UPDATE命令更新自增列，如果列值与已有的值重复，则会出错。如果大于已有值，则下一个编号从该值开始递增。

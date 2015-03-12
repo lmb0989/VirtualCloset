@@ -33,7 +33,7 @@ public class PostManager extends HttpServlet {
 			}else if(postType.equals(POST_TYPE_REGISTER)){
 				path = "/reg";
 			}else if(postType.equals(POST_TYPE_FETCH_USERINFO)){
-				
+				path = "/fetchUserInfo";
 			}else if(postType.equals(POST_TYPE_UPLOAD_IMAGE)){
 				
 			}else if(postType.equals(POST_TYPE_UPLOAD_FILE)){

@@ -62,7 +62,7 @@ public class UserLogin extends HttpServlet {
         	session.setAttribute("userName", userName);
 //        	out.print("µÇÂ½³É¹¦");
         }
-    	out.print(hander.createrLoginMessage(loginResult));
+    	out.print(hander.createrLoginOrRegMessage(loginResult));
         
         out.flush(); 
         out.close();   

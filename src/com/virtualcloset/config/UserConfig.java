@@ -6,6 +6,7 @@ public class UserConfig {
 	public static final int LOGIN_MESSAGE_USERNOTEXIST  = 1;
 	public static final int LOGIN_MESSAGE_PASSWRONG     = 2;
 	
+	public static final int REG_MESSAGE_FAILED     = -1;
 	public static final int REG_MESSAGE_REGSUCCESS = 0;
 	public static final int REG_MESSAGE_USEREXIST    = 1;
 	public static final int REG_MESSAGE_EMAILEXIST  = 2;

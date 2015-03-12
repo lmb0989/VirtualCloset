@@ -11,7 +11,6 @@ public class UserBean {
 	private String sex;
 	private int age;
 	private String job;
-	private String image;
 	
 	public String getUserName() {
 		return userName;
@@ -54,11 +53,5 @@ public class UserBean {
 	}
 	public void setJob(String job) {
 		this.job = job;
-	}
-	public String getImage() {
-		return image;
-	}
-	public void setImage(String userImage) {
-		this.image = userImage;
 	}
 }

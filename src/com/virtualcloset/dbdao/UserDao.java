@@ -58,10 +58,10 @@ public class UserDao {
 		return false;
 	}
 	
-	public static boolean isUserPhoneExist(int userPhone) throws SQLException {
+	public static boolean isUserPhoneExist(String userPhone) throws SQLException {
 		ResultSet rs = getAllUser();
 		while(rs.next()){
-			if(rs.getInt("phone") == userPhone){
+			if(rs.getString("phone").equals(userPhone)){
 				return true;
 			}
 		}
@@ -87,24 +87,57 @@ public class UserDao {
 		return rs;
 	}
 	
-	public static int regUser(UserBean user){
-		initConnect();
+	public static int regUser(UserBean user) throws SQLException{
 		StringBuilder sb = new StringBuilder();
-		sb.append("insert  into user values ('").append(user.getUserName()).append("','").append(user.getPassword()).append("'");
-		if(user.getEmail() == null){
-			close();
-			return UserConfig.REG_MESSAGE_EMAILEXIST;
-		}else{
-			sb.append(",'").append(user.getEmail()).append("','");
-//		}
+		sb.append("insert into user values ('").append(user.getUserName()).append("','").append(user.getPassword()).append("'");
+		
+		String email = user.getEmail();
+		if(email==null || email.isEmpty()) email = "";
+		if(isUserEmailExist(email)) return UserConfig.REG_MESSAGE_EMAILEXIST;
+		sb.append(",'").append(email).append("'");
+		
+		String phone = user.getPhone();
+		if(phone==null || phone.isEmpty()) phone = "";
+		if(isUserPhoneExist(phone)) return UserConfig.REG_MESSAGE_PHONEEXIST;
+		sb.append(",'").append(phone).append("'");
+		
+		String sex = user.getSex();
+		if(sex==null || sex.isEmpty()) sex = "";
+		sb.append(",'").append(sex).append("'");
+		
+		int age = user.getAge();
+		if(age <= 0) age = 0;
+		sb.append(",").append(age);
+		
+		String job = user.getJob();
+		if(job==null || job.isEmpty()) job = "";
+		sb.append(",'").append(job).append("'");
 		
 		sb.append(")");
-		String sql = "insert  into user values ('"+userName+"','"+passWord+"')";
+		String sql = sb.toString();
+		System.out.println("register sql" +sql);
 		
-		
+		initConnect();
 		int res = ConnDBC3P0.exetUpdate(stmt, sql);
 		close();
-		return res==0;
+		return res==0 ? UserConfig.REG_MESSAGE_REGSUCCESS : UserConfig.REG_MESSAGE_FAILED;
+	}
+	
+	public static UserBean getUer(String userName) throws SQLException{
+		UserBean user = new UserBean();
+		initConnect();
+		String sql = "select * from user where username='"+userName+"'";
+		rs = ConnDBC3P0.exetQuery(stmt, sql);
+		while(rs.next()){
+			user.setUserName(userName);
+			user.setEmail(rs.getString("email"));
+			user.setPhone(rs.getString("phone"));
+			user.setSex(rs.getString("sex"));
+			user.setAge(rs.getInt("age"));
+			user.setJob(rs.getString("job"));
+		}
+		close();
+		return user;
 	}
 	
 	public static void close(){

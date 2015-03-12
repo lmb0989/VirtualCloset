@@ -6,9 +6,9 @@ public class JSONHander {
 
 	public UserBean getLoginUser(String request){
 		try{
-			JSONTokener jsonParser = new JSONTokener(request);  
-			JSONObject req = (JSONObject) jsonParser.nextValue();  
-			// 接下来的就是JSON对象的操作了  
+			JSONTokener jsonParser = new JSONTokener(request);
+			JSONObject req = (JSONObject) jsonParser.nextValue();
+			
 			UserBean user = new UserBean();
 			user.setUserName(req.getString("username"));  
 			user.setPassword(req.getString("password"));  
@@ -19,11 +19,39 @@ public class JSONHander {
 		}
 	}
 	
+	public String getUserName(String request){
+		try{
+			JSONTokener jsonParser = new JSONTokener(request);
+			JSONObject req = (JSONObject) jsonParser.nextValue();
+
+			return req.getString("username");
+		}catch(JSONException e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public String getUserInfo(UserBean user){
+		try {
+			if(user==null) return null;
+			JSONObject json = new JSONObject();
+			json.put("email", user.getEmail());
+			json.put("phone", user.getPhone());
+			json.put("sex", user.getSex());
+			json.put("age", user.getAge());
+			json.put("job", user.getJob());
+			return json.toString();
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public UserBean getRegUser(String request){
 		try{
-			JSONTokener jsonParser = new JSONTokener(request);  
-			JSONObject req = (JSONObject) jsonParser.nextValue();  
-			// 接下来的就是JSON对象的操作了  
+			JSONTokener jsonParser = new JSONTokener(request);
+			JSONObject req = (JSONObject) jsonParser.nextValue();
+
 			UserBean user = new UserBean();
 			user.setUserName(req.getString("username"));  
 			user.setPassword(req.getString("password")); 
@@ -42,9 +70,9 @@ public class JSONHander {
 	
 	public String getPostType(String request){
 		try{
-			JSONTokener jsonParser = new JSONTokener(request);  
-			JSONObject req = (JSONObject) jsonParser.nextValue();  
-			// 接下来的就是JSON对象的操作了  
+			JSONTokener jsonParser = new JSONTokener(request);
+			JSONObject req = (JSONObject) jsonParser.nextValue();
+
 			return req.getString("type");  
 		}catch(JSONException e){
 			e.printStackTrace();
@@ -52,9 +80,9 @@ public class JSONHander {
 		}
 	}
 	
-	public String createrLoginMessage(int message){
+	public String createrLoginOrRegMessage(int message){
 		try{
-			JSONObject user = new JSONObject();  
+			JSONObject user = new JSONObject();
 			user.put("message", message);
 			return user.toString();
 		}catch(JSONException ex){
