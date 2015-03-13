@@ -60,9 +60,10 @@ public class UserLogin extends HttpServlet {
         if(loginResult == UserConfig.LOGIN_MESSAGE_LOGINSUCCESS){
         	HttpSession session = request.getSession();
         	session.setAttribute("userName", userName);
+        	System.out.println("UserLogin.class userName>>>"+userName);
 //        	out.print("µÇÂ½³É¹¦");
         }
-    	out.print(hander.createrLoginOrRegMessage(loginResult));
+    	out.print(hander.createrLoginOrRegMessage(userName, loginResult));
         
         out.flush(); 
         out.close();   

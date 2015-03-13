@@ -25,19 +25,19 @@ public class UserBean {
 		this.password = password;
 	}
 	public String getEmail() {
-		return email;
+		return email==null ? "" : email;
 	}
 	public void setEmail(String email) {
 		this.email = email;
 	}
 	public String getPhone() {
-		return phone;
+		return phone==null ? "" : phone;
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 	public String getSex() {
-		return sex;
+		return sex==null ? "" : sex;
 	}
 	public void setSex(String sex) {
 		this.sex = sex;
@@ -49,7 +49,7 @@ public class UserBean {
 		this.age = age;
 	}
 	public String getJob() {
-		return job;
+		return job==null ? "" : job;
 	}
 	public void setJob(String job) {
 		this.job = job;

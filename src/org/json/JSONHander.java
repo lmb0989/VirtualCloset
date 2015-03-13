@@ -35,9 +35,11 @@ public class JSONHander {
 		try {
 			if(user==null) return null;
 			JSONObject json = new JSONObject();
+			json.put("username", user.getUserName());
 			json.put("email", user.getEmail());
 			json.put("phone", user.getPhone());
 			json.put("sex", user.getSex());
+			System.out.println("getUserInfo  age>>>"+user.getAge());
 			json.put("age", user.getAge());
 			json.put("job", user.getJob());
 			return json.toString();
@@ -80,9 +82,10 @@ public class JSONHander {
 		}
 	}
 	
-	public String createrLoginOrRegMessage(int message){
+	public String createrLoginOrRegMessage(String userName, int message){
 		try{
 			JSONObject user = new JSONObject();
+			user.put("username", userName);
 			user.put("message", message);
 			return user.toString();
 		}catch(JSONException ex){

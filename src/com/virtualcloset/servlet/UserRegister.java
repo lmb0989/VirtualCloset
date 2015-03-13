@@ -44,7 +44,7 @@ public class UserRegister extends HttpServlet {
 			HttpSession session = request.getSession();
         	session.setAttribute("userName", user.getUserName());
 		}
-		out.print(hander.createrLoginOrRegMessage(regResult));
+		out.print(hander.createrLoginOrRegMessage(user.getUserName(), regResult));
 		out.flush();
 		out.close();
 	}

@@ -115,7 +115,7 @@ public class UserDao {
 		
 		sb.append(")");
 		String sql = sb.toString();
-		System.out.println("register sql" +sql);
+		System.out.println("register sql>>>" +sql);
 		
 		initConnect();
 		int res = ConnDBC3P0.exetUpdate(stmt, sql);
@@ -133,6 +133,7 @@ public class UserDao {
 			user.setEmail(rs.getString("email"));
 			user.setPhone(rs.getString("phone"));
 			user.setSex(rs.getString("sex"));
+			System.out.println("age>>>"+rs.getInt("age"));
 			user.setAge(rs.getInt("age"));
 			user.setJob(rs.getString("job"));
 		}

@@ -20,6 +20,16 @@
     <servlet-name>FetchUserInfo</servlet-name>
     <servlet-class>com.virtualcloset.servlet.FetchUserInfo</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>UploadFile</servlet-name>
+    <servlet-class>com.virtualcloset.servlet.UploadFile</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>UploadFile1</servlet-name>
+    <servlet-class>com.virtualcloset.servlet.UploadFile1</servlet-class>
+  </servlet>
+
+
 
   <servlet-mapping>
     <servlet-name>UserLogin</servlet-name>
@@ -36,6 +46,14 @@
   <servlet-mapping>
     <servlet-name>FetchUserInfo</servlet-name>
     <url-pattern>/fetchUserInfo</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UploadFile</servlet-name>
+    <url-pattern>/uploadfile</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UploadFile1</servlet-name>
+    <url-pattern>/uploadfile1</url-pattern>
   </servlet-mapping>
   
   <welcome-file-list>
