@@ -37,7 +37,7 @@ public class PostManager extends HttpServlet {
 			}else if(postType.equals(POST_TYPE_UPLOAD_IMAGE)){
 				
 			}else if(postType.equals(POST_TYPE_UPLOAD_FILE)){
-				
+				path = "/uploadfile";
 			}else if(postType.equals(POST_TYPE_DOWNLOAD_IMAGE)){
 				
 			}else{

@@ -24,24 +24,26 @@ public class UploadFile extends HttpServlet {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("gbk");
 		PrintWriter out = response.getWriter();
-		
+
 		
         request.setCharacterEncoding("utf-8");
-        //获得磁盘文件条目工厂。  
-        DiskFileItemFactory factory = new DiskFileItemFactory();  
-        //获取文件上传需要保存的路径，upload文件夹需存在。  
-        String path = request.getSession().getServletContext().getRealPath("/upload");  
+        //获得磁盘文件条目工厂。
+        DiskFileItemFactory factory = new DiskFileItemFactory();
+        //获取文件上传需要保存的路径，upload文件夹需存在。
+        String path = request.getSession().getServletContext().getRealPath("/upload");
+        System.out.println("UploadFile.java path>>>"+path);
         //设置暂时存放文件的存储室，这个存储室可以和最终存储文件的文件夹不同。因为当文件很大的话会占用过多内存所以设置存储室。 
         String temp = request.getSession().getServletContext().getRealPath("/")+"temp";   //临时目录
-        factory.setRepository(new File(temp));  
+        System.out.println("UploadFile.java path>>>"+temp);
+        factory.setRepository(new File(temp));
         //设置缓存的大小，当上传文件的容量超过缓存时，就放到暂时存储室。
-        factory.setSizeThreshold(1024*1024);  
-        //上传处理工具类（高水平API上传处理？）  
+        factory.setSizeThreshold(1024*1024);
+        //上传处理工具类（高水平API上传处理？）
         ServletFileUpload upload = new ServletFileUpload(factory);  
           
         try{  
             //调用 parseRequest（request）方法  获得上传文件 FileItem 的集合list 可实现多文件上传。
-            List<FileItem> list = (List<FileItem>)upload.parseRequest(request);  
+            List<FileItem> list = (List<FileItem>)upload.parseRequest(request);
             for(FileItem item:list){  
                 //获取表单属性名字。  
                 String name = item.getFieldName();  
