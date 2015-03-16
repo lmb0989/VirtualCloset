@@ -66,7 +66,7 @@ public class UserLogin extends HttpServlet {
     	out.print(hander.createrLoginOrRegMessage(userName, loginResult));
         
         out.flush(); 
-        out.close();   
+        out.close(); 
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response)

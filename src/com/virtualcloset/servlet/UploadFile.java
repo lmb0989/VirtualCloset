@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -24,9 +25,11 @@ public class UploadFile extends HttpServlet {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("gbk");
 		PrintWriter out = response.getWriter();
-
 		
-        request.setCharacterEncoding("utf-8");
+		HttpSession ses = request.getSession();    
+		ses.setMaxInactiveInterval(1800);  
+
+        request.setCharacterEncoding("gbk");
         //获得磁盘文件条目工厂。
         DiskFileItemFactory factory = new DiskFileItemFactory();
         //获取文件上传需要保存的路径，upload文件夹需存在。
@@ -40,6 +43,7 @@ public class UploadFile extends HttpServlet {
         factory.setSizeThreshold(1024*1024);
         //上传处理工具类（高水平API上传处理？）
         ServletFileUpload upload = new ServletFileUpload(factory);  
+        upload.setSizeMax(100*1024*1024);	//100M
           
         try{  
             //调用 parseRequest（request）方法  获得上传文件 FileItem 的集合list 可实现多文件上传。
@@ -51,6 +55,8 @@ public class UploadFile extends HttpServlet {
                 if(item.isFormField()){  
                     //获取用户具体输入的字符串，  
                     String value = item.getString();  
+                    System.out.println("UploadFile.java value>>>"+value);
+                    out.print(value);
                     request.setAttribute(name, value);  
                 }  
                 //如果传入的是非简单字符串，而是图片，音频，视频等二进制文件。

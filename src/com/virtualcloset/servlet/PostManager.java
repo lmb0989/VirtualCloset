@@ -44,6 +44,7 @@ public class PostManager extends HttpServlet {
 				
 			}
 			if(path != null){
+				System.out.println("PostManager.java  path >>> "+path);
 				request.getRequestDispatcher(path) .forward(request,response);
 			}
 		}
