@@ -26,8 +26,8 @@ public class UploadFile extends HttpServlet {
 		response.setCharacterEncoding("gbk");
 		PrintWriter out = response.getWriter();
 		
-		HttpSession ses = request.getSession();    
-		ses.setMaxInactiveInterval(1800);  
+		HttpSession seesion = request.getSession();
+		seesion.setMaxInactiveInterval(1800);
 
         request.setCharacterEncoding("gbk");
         //获得磁盘文件条目工厂。

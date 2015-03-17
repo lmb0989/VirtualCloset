@@ -1,6 +1,6 @@
 /*
 SQLyog Ultimate v8.32 
-MySQL - 5.5.13 : Database - virtualcloset
+MySQL - 5.1.30-community : Database - virtualcloset
 *********************************************************************
 */
 
@@ -16,6 +16,22 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`virtualcloset` /*!40100 DEFAULT CHARACT
 
 USE `virtualcloset`;
 
+/*Table structure for table `resource` */
+
+DROP TABLE IF EXISTS `resource`;
+
+CREATE TABLE `resource` (
+  `username` varchar(30) NOT NULL,
+  `resname` varchar(50) NOT NULL,
+  `type` int(11) NOT NULL,
+  `size` int(11) DEFAULT NULL,
+  `labels` varchar(100) DEFAULT NULL,
+  `location` varchar(100) NOT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+/*Data for the table `resource` */
+
 /*Table structure for table `user` */
 
 DROP TABLE IF EXISTS `user`;
@@ -28,12 +44,17 @@ CREATE TABLE `user` (
   `sex` varchar(2) DEFAULT NULL,
   `age` int(4) DEFAULT NULL,
   `job` varchar(50) DEFAULT NULL,
+  `height` int(11) DEFAULT NULL,
+  `weight` int(11) DEFAULT NULL,
+  `bust` int(11) DEFAULT NULL,
+  `waist` int(11) DEFAULT NULL,
+  `hip` int(11) DEFAULT NULL,
   PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk;
 
 /*Data for the table `user` */
 
-insert  into `user`(`username`,`password`,`email`,`phone`,`sex`,`age`,`job`) values ('admin','12345','1150274785@qq.com','13641848002',NULL,NULL,NULL);
+insert  into `user`(`username`,`password`,`email`,`phone`,`sex`,`age`,`job`,`height`,`weight`,`bust`,`waist`,`hip`) values ('admin','12345','1150274785@qq.com','13641848002',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -12,6 +12,13 @@ public class UserBean {
 	private int age;
 	private String job;
 	
+	private int height;		//身高
+	private int weight;		//体重
+	private int bust;		//胸围
+	private int waist;		//腰围
+	private int hip;		//臀围
+	
+	
 	public String getUserName() {
 		return userName;
 	}
@@ -53,5 +60,35 @@ public class UserBean {
 	}
 	public void setJob(String job) {
 		this.job = job;
+	}
+	public int getHeight() {
+		return height;
+	}
+	public void setHeight(int height) {
+		this.height = height;
+	}
+	public int getWeight() {
+		return weight;
+	}
+	public void setWeight(int weight) {
+		this.weight = weight;
+	}
+	public int getBust() {
+		return bust;
+	}
+	public void setBust(int bust) {
+		this.bust = bust;
+	}
+	public int getWaist() {
+		return waist;
+	}
+	public void setWaist(int waist) {
+		this.waist = waist;
+	}
+	public int getHip() {
+		return hip;
+	}
+	public void setHip(int hip) {
+		this.hip = hip;
 	}
 }

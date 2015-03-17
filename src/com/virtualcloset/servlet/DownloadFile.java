@@ -16,7 +16,6 @@ public class DownloadFile extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		  try {
 			  	String downFilename ="Screenshot_2015-03-04-10-46-08.png";
 			  	String filepath = request.getSession().getServletContext().getRealPath("/upload");

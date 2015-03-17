@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import com.virtualcloset.config.UserConfig;
 import com.virtualcloset.model.UserBean;
@@ -139,6 +140,13 @@ public class UserDao {
 		}
 		close();
 		return user;
+	}
+	
+	public static ArrayList getAllResource(String username){
+		ArrayList list = new ArrayList<String>();
+		
+		
+//		return list;
 	}
 	
 	public static void close(){
