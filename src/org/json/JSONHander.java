@@ -23,7 +23,6 @@ public class JSONHander {
 		try{
 			JSONTokener jsonParser = new JSONTokener(request);
 			JSONObject req = (JSONObject) jsonParser.nextValue();
-
 			return req.getString("username");
 		}catch(JSONException e){
 			e.printStackTrace();

@@ -21,7 +21,7 @@ public class ListNeedResource extends HttpServlet {
 		
 		String json = request.getParameter("requestJson");
         JSONHander hander = new JSONHander();
-        
+        hander.getUserName(json);
         
 		
 		out.flush();

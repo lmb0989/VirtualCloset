@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import com.virtualcloset.config.UserConfig;
+import com.virtualcloset.model.ImageBean;
 import com.virtualcloset.model.UserBean;
 
 public class UserDao {
@@ -142,11 +143,26 @@ public class UserDao {
 		return user;
 	}
 	
-	public static ArrayList getAllResource(String username){
-		ArrayList list = new ArrayList<String>();
-		
-		
-//		return list;
+	public static ArrayList getAllImages(String username) throws SQLException{
+		ArrayList imageList = new ArrayList<ImageBean>();
+		initConnect();
+		String sql = "select * from images where username='" + username +"'";
+		rs = ConnDBC3P0.exetQuery(stmt, sql);
+		while(rs.next()){
+			ImageBean image = new ImageBean();
+			image.setImageId(rs.getInt("imageid"));
+			image.setImageName(rs.getString("imagename"));
+			image.setImageSize(rs.getInt("size"));
+			String labels[] = rs.getString("labels").split("|");
+			ArrayList<String> imageLabels = new ArrayList<String>();
+			for(String label : labels){
+				imageLabels.add(label);
+			}
+			image.setImageLabels(imageLabels);
+			imageList.add(image);
+		}
+		close();
+		return imageList;
 	}
 	
 	public static void close(){
