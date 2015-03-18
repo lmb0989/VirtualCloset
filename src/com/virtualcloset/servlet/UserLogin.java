@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONHander;
 
 import com.virtualcloset.config.UserConfig;
-import com.virtualcloset.dbdao.UserDao;
+import com.virtualcloset.dbdao.DatabaseDao;
 import com.virtualcloset.model.UserBean;
 import com.virtualcloset.util.UserUtil;
 
@@ -34,22 +34,22 @@ public class UserLogin extends HttpServlet {
         int loginResult;
         try {
 	        if(userType == UserConfig.USER_TYPE_USERNAME){
-				loginResult = UserDao.login(user);
+				loginResult = DatabaseDao.login(user);
 	        }else if(userType == UserConfig.USER_TYPE_USEREMAIL){
-	        	userName = UserDao.getUserName(userName, "email");
+	        	userName = DatabaseDao.getUserName(userName, "email");
 	        	if(userName == null){
 	        		loginResult = UserConfig.LOGIN_MESSAGE_USERNOTEXIST;
 	        	}else{
 	        		user.setUserName(userName);
-	        		loginResult = UserDao.login(user);
+	        		loginResult = DatabaseDao.login(user);
 	        	}
 	        }else{
-	        	userName = UserDao.getUserName(userName, "phone");
+	        	userName = DatabaseDao.getUserName(userName, "phone");
 	        	if(userName == null){
 	        		loginResult = UserConfig.LOGIN_MESSAGE_USERNOTEXIST;
 	        	}else{
 	        		user.setUserName(userName);
-	        		loginResult = UserDao.login(user);
+	        		loginResult = DatabaseDao.login(user);
 	        	}
 	        }
         } catch (SQLException e) {

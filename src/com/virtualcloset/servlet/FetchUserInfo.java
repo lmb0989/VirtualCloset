@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONHander;
 
-import com.virtualcloset.dbdao.UserDao;
+import com.virtualcloset.dbdao.DatabaseDao;
 import com.virtualcloset.model.UserBean;
 
 public class FetchUserInfo extends HttpServlet {
@@ -35,7 +35,7 @@ public class FetchUserInfo extends HttpServlet {
         
         UserBean user = null;
         try {
-			user = UserDao.getUer(userName);
+			user = DatabaseDao.getUer(userName);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

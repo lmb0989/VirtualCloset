@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONHander;
 
 import com.virtualcloset.config.UserConfig;
-import com.virtualcloset.dbdao.UserDao;
+import com.virtualcloset.dbdao.DatabaseDao;
 import com.virtualcloset.model.UserBean;
 
 public class UserRegister extends HttpServlet {
@@ -30,10 +30,10 @@ public class UserRegister extends HttpServlet {
         
         int regResult;
         try {
-			if(UserDao.isUserNameExist(user.getUserName())){
+			if(DatabaseDao.isUserNameExist(user.getUserName())){
 				regResult = UserConfig.REG_MESSAGE_USEREXIST;
 			}else{
-				regResult = UserDao.regUser(user);
+				regResult = DatabaseDao.regUser(user);
 			}
 		} catch (SQLException e) {
 			regResult = UserConfig.REG_MESSAGE_FAILED;

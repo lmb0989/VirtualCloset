@@ -1,5 +1,9 @@
 package org.json;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.virtualcloset.model.ImageBean;
 import com.virtualcloset.model.UserBean;
 
 public class JSONHander {
@@ -54,7 +58,7 @@ public class JSONHander {
 			JSONObject req = (JSONObject) jsonParser.nextValue();
 
 			UserBean user = new UserBean();
-			user.setUserName(req.getString("username"));  
+			user.setUserName(req.getString("username"));
 			user.setPassword(req.getString("password")); 
 			if(req.getString("email") != null) user.setEmail(req.getString("email"));  
 			if(req.getString("phone") != null) user.setPhone(req.getString("phone"));  
@@ -90,6 +94,57 @@ public class JSONHander {
 		}catch(JSONException ex){
 			ex.printStackTrace();
 			return null;
+		}
+	}
+	
+	public List<Integer> getClientAllImages(String request){
+		try{
+			JSONTokener jsonParser = new JSONTokener(request);
+			JSONObject req = (JSONObject) jsonParser.nextValue();
+			
+			ArrayList<Integer> imageList = new ArrayList<Integer>();
+			JSONArray imageArray = req.getJSONArray("imageIdList");
+			for(int i=0; i<imageArray.length(); i++){
+				imageList.add(imageArray.getInt(i));
+			}
+			return imageList;
+		}catch(JSONException ex){
+			ex.printStackTrace();
+			return null;
+		}
+	}
+	
+	public String getNeedImage(List<ImageBean> imageList){
+		try{
+			JSONArray imageArray = new JSONArray();
+			for(ImageBean image : imageList){
+				JSONObject imageObject = new JSONObject();
+				imageObject.put("imageId", image.getImageId());
+				imageObject.put("imageName", image.getImageName());
+				imageObject.put("imageSize", image.getImageSize());
+				JSONArray imageLabels = new JSONArray();
+				for(String label : image.getImageLabels()){
+					imageLabels.put(label);
+				}
+				imageObject.put("imageLabels", imageLabels);
+				imageArray.put(imageObject);
+			}
+			return imageArray.toString();
+		}catch(JSONException ex){
+			ex.printStackTrace();
+			return null;
+		}
+	}
+	
+	public int getImageID(String request){
+		try{
+			JSONTokener jsonParser = new JSONTokener(request);
+			JSONObject req = (JSONObject) jsonParser.nextValue();
+			
+			return req.getInt("imageId");
+		}catch(JSONException ex){
+			ex.printStackTrace();
+			return -1;
 		}
 	}
 }
