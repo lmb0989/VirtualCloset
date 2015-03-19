@@ -22,7 +22,7 @@ public class ListNeedResource extends HttpServlet {
 			throws ServletException, IOException {
 
 		response.setContentType("text/html");
-		response.setCharacterEncoding("gbk");
+		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();
 		
 		String json = request.getParameter("requestJson");
@@ -31,7 +31,7 @@ public class ListNeedResource extends HttpServlet {
         
         List<ImageBean> result = new ArrayList<ImageBean>();
         try {
-        	List<ImageBean> serverImageList = DatabaseDao.getAllImages(userName);
+        	List<ImageBean> serverImageList = (new DatabaseDao()).getAllImages(userName);
 			List<Integer>   clientImageList = hander.getClientAllImages(json);
 			for(ImageBean image : serverImageList){
 				if(!clientImageList.contains(image.getImageId())){

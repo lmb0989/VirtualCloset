@@ -27,7 +27,7 @@ public class DownloadFile extends HttpServlet {
         
         if(imageId > -1){
         	try {
-        		fileName = DatabaseDao.getImageName(imageId);
+        		fileName = (new DatabaseDao()).getImageName(imageId);
 			} catch (SQLException e){
 				e.printStackTrace();
 			}

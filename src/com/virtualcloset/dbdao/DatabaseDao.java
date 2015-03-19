@@ -12,16 +12,16 @@ import com.virtualcloset.model.UserBean;
 
 public class DatabaseDao {
 	
-	private static Connection conn;
-	private static Statement stmt;
-	private static ResultSet rs;
+	private Connection conn;
+	private Statement stmt;
+	private ResultSet rs;
 
-	public static void initConnect(){
+	public void initConnect(){
 		conn = ConnDBC3P0.getInstance().getConn();
 		stmt = ConnDBC3P0.createStmt(conn);
 	}
 	
-	public static int login(UserBean user) throws SQLException{
+	public int login(UserBean user) throws SQLException{
 		if(!isUserNameExist(user.getUserName())){
 			return UserConfig.LOGIN_MESSAGE_USERNOTEXIST;
 		}
@@ -37,7 +37,7 @@ public class DatabaseDao {
 		return UserConfig.LOGIN_MESSAGE_LOGINSUCCESS;
 	}
 	
-	public static boolean isUserNameExist(String userName) throws SQLException{
+	public boolean isUserNameExist(String userName) throws SQLException{
 		boolean isExist = false;
 		initConnect();
 		String sql = "select * from user where username='"+userName+"'";
@@ -49,7 +49,7 @@ public class DatabaseDao {
 		return isExist;
 	}
 	
-	public static boolean isUserEmailExist(String userEmail) throws SQLException {
+	public boolean isUserEmailExist(String userEmail) throws SQLException {
 		ResultSet rs = getAllUser();
 		while(rs.next()){
 			if(rs.getString("email").equals(userEmail)){
@@ -60,7 +60,7 @@ public class DatabaseDao {
 		return false;
 	}
 	
-	public static boolean isUserPhoneExist(String userPhone) throws SQLException {
+	public boolean isUserPhoneExist(String userPhone) throws SQLException {
 		ResultSet rs = getAllUser();
 		while(rs.next()){
 			if(rs.getString("phone").equals(userPhone)){
@@ -71,7 +71,7 @@ public class DatabaseDao {
 		return false;
 	}
 	
-	public static String getUserName(String userEmailORPhone, String type) throws SQLException{
+	public String getUserName(String userEmailORPhone, String type) throws SQLException{
 		ResultSet rs = getAllUser();
 		while(rs.next()){
 			if(rs.getString(type).equals(userEmailORPhone)){
@@ -82,29 +82,29 @@ public class DatabaseDao {
 		return null;
 	}
 	
-	public static ResultSet getAllUser(){
+	public ResultSet getAllUser(){
 		initConnect();
 		String sql = "select * from user";
 		rs = ConnDBC3P0.exetQuery(stmt, sql);
 		return rs;
 	}
 	
-	public static int regUser(UserBean user) throws SQLException{
+	public synchronized  int regUser(UserBean user) throws SQLException{
 		StringBuilder sb = new StringBuilder();
 		sb.append("insert into user values ('").append(user.getUserName()).append("','").append(user.getPassword()).append("'");
 		
 		String email = user.getEmail();
-		if(email==null || email.isEmpty()) email = "";
+		if(email==null) email = "";
 		if(isUserEmailExist(email)) return UserConfig.REG_MESSAGE_EMAILEXIST;
 		sb.append(",'").append(email).append("'");
 		
 		String phone = user.getPhone();
-		if(phone==null || phone.isEmpty()) phone = "";
+		if(phone==null) phone = "";
 		if(isUserPhoneExist(phone)) return UserConfig.REG_MESSAGE_PHONEEXIST;
 		sb.append(",'").append(phone).append("'");
 		
 		String sex = user.getSex();
-		if(sex==null || sex.isEmpty()) sex = "";
+		if(sex==null) sex = "";
 		sb.append(",'").append(sex).append("'");
 		
 		int age = user.getAge();
@@ -112,20 +112,27 @@ public class DatabaseDao {
 		sb.append(",").append(age);
 		
 		String job = user.getJob();
-		if(job==null || job.isEmpty()) job = "";
+		if(job==null) job = "";
 		sb.append(",'").append(job).append("'");
+		
+		sb.append(",'").append(user.getHeight()).append("'");
+		sb.append(",'").append(user.getWeight()).append("'");
+		sb.append(",'").append(user.getBust()).append("'");
+		sb.append(",'").append(user.getWaist()).append("'");
+		sb.append(",'").append(user.getHip()).append("'");
 		
 		sb.append(")");
 		String sql = sb.toString();
-		System.out.println("register sql>>>" +sql);
+		System.out.println("register sql>>>  " +sql);
 		
 		initConnect();
 		int res = ConnDBC3P0.exetUpdate(stmt, sql);
 		close();
-		return res==0 ? UserConfig.REG_MESSAGE_REGSUCCESS : UserConfig.REG_MESSAGE_FAILED;
+		System.out.println("×¢²á½á¹û£ºres="+res);
+		return res>0 ? UserConfig.REG_MESSAGE_REGSUCCESS : UserConfig.REG_MESSAGE_FAILED;
 	}
 	
-	public static UserBean getUer(String userName) throws SQLException{
+	public UserBean getUer(String userName) throws SQLException{
 		UserBean user = new UserBean();
 		initConnect();
 		String sql = "select * from user where username='"+userName+"'";
@@ -138,12 +145,17 @@ public class DatabaseDao {
 			System.out.println("age>>>"+rs.getInt("age"));
 			user.setAge(rs.getInt("age"));
 			user.setJob(rs.getString("job"));
+			user.setHeight(rs.getString("height"));
+			user.setWeight(rs.getString("weight"));
+			user.setBust(rs.getString("bust"));
+			user.setWaist(rs.getString("waist"));
+			user.setHip(rs.getString("hip"));
 		}
 		close();
 		return user;
 	}
 	
-	public static ArrayList<ImageBean> getAllImages(String username) throws SQLException{
+	public ArrayList<ImageBean> getAllImages(String username) throws SQLException{
 		ArrayList<ImageBean> imageList = new ArrayList<ImageBean>();
 		initConnect();
 		String sql = "select * from images where username='" + username +"'";
@@ -165,7 +177,7 @@ public class DatabaseDao {
 		return imageList;
 	}
 	
-	public static String getImageName(int imageId) throws SQLException{
+	public String getImageName(int imageId) throws SQLException{
 		String imageName = null;
 		initConnect();
 		String sql = "select * from images where imageid="+imageId;
@@ -177,7 +189,7 @@ public class DatabaseDao {
 		return imageName;
 	}
 	
-	public static void close(){
+	public void close(){
 		ConnDBC3P0.close(conn, stmt, rs);
 	}
 }

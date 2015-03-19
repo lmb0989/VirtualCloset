@@ -23,7 +23,7 @@ public class UploadFile extends HttpServlet {
 			throws ServletException, IOException {
 
 		response.setContentType("text/html");
-		response.setCharacterEncoding("gbk");
+		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();
 		
 		HttpSession seesion = request.getSession();
@@ -50,7 +50,7 @@ public class UploadFile extends HttpServlet {
             List<FileItem> list = (List<FileItem>)upload.parseRequest(request);
             for(FileItem item:list){  
                 //获取表单属性名字。  
-                String name = item.getFieldName();  
+                String name = item.getFieldName(); 
                 //如果获取的表单信息是普通的文本信息。即通过页面表单形式传递来的字符串。  
                 if(item.isFormField()){  
                     //获取用户具体输入的字符串，  
@@ -76,18 +76,18 @@ public class UploadFile extends HttpServlet {
                     InputStream in = item.getInputStream();  
                       
                     int length = 0;  
-                    byte[] buf = new byte[1024];  
-                    System.out.println("获取文件总量的容量:"+ item.getSize());  
+                    byte[] buf = new byte[1024];
+                    System.out.println("获取文件总量的容量:"+ item.getSize());
 
-                    while((length = in.read(buf))!=-1){  
-                    	output.write(buf,0,length);  
-                    }  
-                    in.close();  
-                    out.close();  
+                    while((length = in.read(buf))!=-1){
+                    	output.write(buf,0,length);
+                    }
+                    in.close();
+                    out.close();
                 }
             }
-        }catch(Exception e){  
-            e.printStackTrace();  
+        }catch(Exception e){
+            e.printStackTrace(); 
         }  
 
 		out.flush();

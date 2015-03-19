@@ -21,23 +21,29 @@ public class UserRegister extends HttpServlet {
 			throws ServletException, IOException {
 		
 		response.setContentType("text/html"); 
-		response.setCharacterEncoding("gbk");
+		response.setCharacterEncoding("utf-8");
         PrintWriter out = response.getWriter(); 
         
         String json = request.getParameter("requestJson");
         JSONHander hander = new JSONHander();
+        DatabaseDao dao = new DatabaseDao();
         UserBean user = hander.getRegUser(json);
         
         int regResult;
         try {
-			if(DatabaseDao.isUserNameExist(user.getUserName())){
+			if(dao.isUserNameExist(user.getUserName())){
 				regResult = UserConfig.REG_MESSAGE_USEREXIST;
+				System.out.println("注册结果：用户已存在");
 			}else{
-				regResult = DatabaseDao.regUser(user);
+				regResult = dao.regUser(user);
+				System.out.println("注册返回结果：regResult="+regResult);
 			}
 		} catch (SQLException e) {
+			System.out.println("注册出错了1");
 			regResult = UserConfig.REG_MESSAGE_FAILED;
+			System.out.println("注册出错了2  regResult="+regResult);
 			e.printStackTrace();
+			System.out.println("注册报错...");
 		}
 		
 		if(regResult == UserConfig.REG_MESSAGE_REGSUCCESS){

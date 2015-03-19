@@ -4,20 +4,18 @@ import java.sql.Date;
 
 public class UserBean {
 	
-	private String userName;
-	private String password;
-	private String email;
-	private String phone;
-	private String sex;
+	private String userName = null;
+	private String password = null;
+	private String email = "";
+	private String phone = "";
+	private String sex = "";
 	private int age;
-	private String job;
-	
-	private int height;		//身高
-	private int weight;		//体重
-	private int bust;		//胸围
-	private int waist;		//腰围
-	private int hip;		//臀围
-	
+	private String job = "";
+	private String height = "";		//身高
+	private String weight = "";		//体重
+	private String bust = "";			//胸围
+	private String waist = "";			//腰围
+	private String hip = "";				//臀围
 	
 	public String getUserName() {
 		return userName;
@@ -61,34 +59,34 @@ public class UserBean {
 	public void setJob(String job) {
 		this.job = job;
 	}
-	public int getHeight() {
+	public String getHeight() {
 		return height;
 	}
-	public void setHeight(int height) {
+	public void setHeight(String height) {
 		this.height = height;
 	}
-	public int getWeight() {
+	public String getWeight() {
 		return weight;
 	}
-	public void setWeight(int weight) {
+	public void setWeight(String weight) {
 		this.weight = weight;
 	}
-	public int getBust() {
+	public String getBust() {
 		return bust;
 	}
-	public void setBust(int bust) {
+	public void setBust(String bust) {
 		this.bust = bust;
 	}
-	public int getWaist() {
+	public String getWaist() {
 		return waist;
 	}
-	public void setWaist(int waist) {
+	public void setWaist(String waist) {
 		this.waist = waist;
 	}
-	public int getHip() {
+	public String getHip() {
 		return hip;
 	}
-	public void setHip(int hip) {
+	public void setHip(String hip) {
 		this.hip = hip;
 	}
 }

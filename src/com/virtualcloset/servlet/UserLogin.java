@@ -22,11 +22,12 @@ public class UserLogin extends HttpServlet {
 			throws ServletException, IOException {
 		
 		response.setContentType("text/html"); 
-		response.setCharacterEncoding("gbk");
+		response.setCharacterEncoding("utf-8");
         PrintWriter out = response.getWriter(); 
         
         String json = request.getParameter("requestJson");
         JSONHander hander = new JSONHander();
+        DatabaseDao dao = new DatabaseDao();
         UserBean user = hander.getLoginUser(json);
         
         String userName = user.getUserName();
@@ -34,22 +35,22 @@ public class UserLogin extends HttpServlet {
         int loginResult;
         try {
 	        if(userType == UserConfig.USER_TYPE_USERNAME){
-				loginResult = DatabaseDao.login(user);
+				loginResult = dao.login(user);
 	        }else if(userType == UserConfig.USER_TYPE_USEREMAIL){
-	        	userName = DatabaseDao.getUserName(userName, "email");
+	        	userName = dao.getUserName(userName, "email");
 	        	if(userName == null){
 	        		loginResult = UserConfig.LOGIN_MESSAGE_USERNOTEXIST;
 	        	}else{
 	        		user.setUserName(userName);
-	        		loginResult = DatabaseDao.login(user);
+	        		loginResult = dao.login(user);
 	        	}
 	        }else{
-	        	userName = DatabaseDao.getUserName(userName, "phone");
+	        	userName = dao.getUserName(userName, "phone");
 	        	if(userName == null){
 	        		loginResult = UserConfig.LOGIN_MESSAGE_USERNOTEXIST;
 	        	}else{
 	        		user.setUserName(userName);
-	        		loginResult = DatabaseDao.login(user);
+	        		loginResult = dao.login(user);
 	        	}
 	        }
         } catch (SQLException e) {

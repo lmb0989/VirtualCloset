@@ -22,7 +22,7 @@ public class FetchUserInfo extends HttpServlet {
 
 		System.out.println("=========");
 		response.setContentType("text/html");
-		response.setCharacterEncoding("gbk");
+		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();
 		
 		String json = request.getParameter("requestJson");
@@ -35,7 +35,7 @@ public class FetchUserInfo extends HttpServlet {
         
         UserBean user = null;
         try {
-			user = DatabaseDao.getUer(userName);
+			user = (new DatabaseDao()).getUer(userName);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

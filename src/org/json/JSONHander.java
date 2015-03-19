@@ -45,6 +45,11 @@ public class JSONHander {
 			System.out.println("getUserInfo  age>>>"+user.getAge());
 			json.put("age", user.getAge());
 			json.put("job", user.getJob());
+			json.put("bust", user.getBust());
+			json.put("waist", user.getWaist());
+			json.put("hips", user.getHip());
+			json.put("height", user.getHeight());
+			json.put("weight", user.getWeight());
 			return json.toString();
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -64,7 +69,12 @@ public class JSONHander {
 			if(req.getString("phone") != null) user.setPhone(req.getString("phone"));  
 			if(req.getString("sex") != null) user.setSex(req.getString("sex"));  
 			if(req.getInt("age") >0 ) user.setAge(req.getInt("age")); 
-			if(req.getString("job") != null) user.setJob(req.getString("job"));  
+			if(req.getString("job") != null) user.setJob(req.getString("job"));
+			if(req.getString("bust") != null) user.setBust(req.getString("bust"));
+			if(req.getString("waist") != null) user.setWaist(req.getString("waist"));
+			if(req.getString("hips") != null) user.setHip(req.getString("hips"));
+			if(req.getString("height") != null) user.setHeight(req.getString("height"));
+			if(req.getString("weight") != null) user.setWeight(req.getString("weight"));
 			
 			return user;
 		}catch(JSONException e){
