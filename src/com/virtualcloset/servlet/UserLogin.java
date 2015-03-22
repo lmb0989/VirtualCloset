@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONHander;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import com.virtualcloset.config.UserConfig;
 import com.virtualcloset.dbdao.DatabaseDao;
@@ -17,54 +19,57 @@ import com.virtualcloset.model.UserBean;
 import com.virtualcloset.util.UserUtil;
 
 public class UserLogin extends HttpServlet {
-
+	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		response.setContentType("text/html"); 
 		response.setCharacterEncoding("utf-8");
-        PrintWriter out = response.getWriter(); 
+        PrintWriter out = response.getWriter();
         
-        String json = request.getParameter("requestJson");
-        JSONHander hander = new JSONHander();
-        DatabaseDao dao = new DatabaseDao();
-        UserBean user = hander.getLoginUser(json);
+        String strJson = request.getParameter("requestJson");
+//        JSONHander hander = new JSONHander();
+//        DatabaseDao dao = new DatabaseDao();
+//        UserBean user = hander.getLoginUser(strJson);
         
-        String userName = user.getUserName();
+        JSONTokener jsonParser = new JSONTokener(strJson);
+		JSONObject jobj = (JSONObject) jsonParser.nextValue();
+		String userName = jobj.getString("username");
+        
         int userType = UserUtil.getUserType(userName);
+        UserBean user = new UserBean(jobj); 
         int loginResult;
         try {
-	        if(userType == UserConfig.USER_TYPE_USERNAME){
-				loginResult = dao.login(user);
-	        }else if(userType == UserConfig.USER_TYPE_USEREMAIL){
-	        	userName = dao.getUserName(userName, "email");
-	        	if(userName == null){
-	        		loginResult = UserConfig.LOGIN_MESSAGE_USERNOTEXIST;
+	        if(userType == UserUtil.TYPE_USEREMAIL){
+	        	userName = UserBean.getUserName("email", userName);
+	        	if(userName.isEmpty()){
+	        		loginResult = UserBean.LOGIN_MESSAGE_USERNOTEXIST;
 	        	}else{
-	        		user.setUserName(userName);
-	        		loginResult = dao.login(user);
+	        		jobj.put("username", userName);
+	        		user = new UserBean(jobj);
 	        	}
-	        }else{
-	        	userName = dao.getUserName(userName, "phone");
+	        }else if(userType == UserUtil.TYPE_USERPHONE){
+	        	userName = UserBean.getUserName("phone", userName);
 	        	if(userName == null){
-	        		loginResult = UserConfig.LOGIN_MESSAGE_USERNOTEXIST;
+	        		loginResult = UserBean.LOGIN_MESSAGE_USERNOTEXIST;
 	        	}else{
-	        		user.setUserName(userName);
-	        		loginResult = dao.login(user);
+	        		jobj.put("username", userName);
+	        		user = new UserBean(jobj);
 	        	}
 	        }
-        } catch (SQLException e) {
-        	loginResult = UserConfig.LOGIN_MESSAGE_PASSWRONG;
+	        loginResult = user.login();
+        } catch (Exception e) {
+        	loginResult = UserBean.LOGIN_MESSAGE_PASSWRONG;
         	e.printStackTrace();
         }
         
-        if(loginResult == UserConfig.LOGIN_MESSAGE_LOGINSUCCESS){
+        if(loginResult == UserBean.LOGIN_MESSAGE_LOGINSUCCESS){
         	HttpSession session = request.getSession();
-        	session.setAttribute("userName", userName);
-        	System.out.println("UserLogin.class userName>>>"+userName);
+        	session.setAttribute("userName", user.userName);
+        	System.out.println("UserLogin.class userName>>>"+user.userName);
 //        	out.print("µÇÂ½³É¹¦");
         }
-    	out.print(hander.createrLoginOrRegMessage(userName, loginResult));
+    	out.print(user.createMessage(loginResult).toString());
         
         out.flush(); 
         out.close(); 

@@ -5,10 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
-import com.virtualcloset.config.UserConfig;
 import com.virtualcloset.model.ImageBean;
-import com.virtualcloset.model.UserBean;
 
 public class DatabaseDao {
 	
@@ -16,144 +15,63 @@ public class DatabaseDao {
 	private Statement stmt;
 	private ResultSet rs;
 
-	public void initConnect(){
+	private void initConnect(){
 		conn = ConnDBC3P0.getInstance().getConn();
 		stmt = ConnDBC3P0.createStmt(conn);
 	}
 	
-	public int login(UserBean user) throws SQLException{
-		if(!isUserNameExist(user.getUserName())){
-			return UserConfig.LOGIN_MESSAGE_USERNOTEXIST;
-		}
-		initConnect();
-		String sql = "select * from user where username='"+user.getUserName()+"'";
-		rs = ConnDBC3P0.exetQuery(stmt, sql);
-		while(rs.next()){
-			if(!rs.getString("password").equals(user.getPassword())){
-				return UserConfig.LOGIN_MESSAGE_PASSWRONG;
+	private void close(){
+		ConnDBC3P0.close(conn, stmt, rs);
+	}
+	
+	public Object query(String sql, ObjectMapper mapper){
+		Object obj = null;
+		try {
+			initConnect();
+			rs = ConnDBC3P0.exetQuery(stmt, sql);
+			while(rs.next()){
+				obj = mapper.mapping(rs);
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			close();
 		}
-		close();
-		return UserConfig.LOGIN_MESSAGE_LOGINSUCCESS;
+		return obj;
 	}
 	
-	public boolean isUserNameExist(String userName) throws SQLException{
-		boolean isExist = false;
-		initConnect();
-		String sql = "select * from user where username='"+userName+"'";
-		rs = ConnDBC3P0.exetQuery(stmt, sql);
-		while(rs.next()){
-			isExist = true;
-		}
-		close();
-		return isExist;
-	}
-	
-	public boolean isUserEmailExist(String userEmail) throws SQLException {
-		ResultSet rs = getAllUser();
-		while(rs.next()){
-			if(rs.getString("email").equals(userEmail)){
-				return true;
+	public List<? extends Object> queryList(String sql, ObjectMapper mapper){
+		Object obj = null;
+		List<Object> list = new ArrayList<Object>();
+		try {
+			initConnect();
+			rs = ConnDBC3P0.exetQuery(stmt, sql);
+			while(rs.next()){
+				obj = mapper.mapping(rs);
+				list.add(obj);
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
 		}
-		close();
-		return false;
+		return list;
 	}
 	
-	public boolean isUserPhoneExist(String userPhone) throws SQLException {
-		ResultSet rs = getAllUser();
-		while(rs.next()){
-			if(rs.getString("phone").equals(userPhone)){
-				return true;
-			}
+	public int update(String sql){
+		int res = 0;
+		try {
+			initConnect();
+			res = ConnDBC3P0.exetUpdate(stmt, sql);
+			conn.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
 		}
-		close();
-		return false;
+		return res;
 	}
 	
-	public String getUserName(String userEmailORPhone, String type) throws SQLException{
-		ResultSet rs = getAllUser();
-		while(rs.next()){
-			if(rs.getString(type).equals(userEmailORPhone)){
-				return rs.getString("username");
-			}
-		}
-		close();
-		return null;
-	}
-	
-	public ResultSet getAllUser(){
-		initConnect();
-		String sql = "select * from user";
-		rs = ConnDBC3P0.exetQuery(stmt, sql);
-		return rs;
-	}
-	
-	public synchronized  int regUser(UserBean user) throws SQLException{
-		StringBuilder sb = new StringBuilder();
-		sb.append("insert into user values ('").append(user.getUserName()).append("','").append(user.getPassword()).append("'");
-		
-		String email = user.getEmail();
-		if(email==null) email = "";
-		if(isUserEmailExist(email)) return UserConfig.REG_MESSAGE_EMAILEXIST;
-		sb.append(",'").append(email).append("'");
-		
-		String phone = user.getPhone();
-		if(phone==null) phone = "";
-		if(isUserPhoneExist(phone)) return UserConfig.REG_MESSAGE_PHONEEXIST;
-		sb.append(",'").append(phone).append("'");
-		
-		String sex = user.getSex();
-		if(sex==null) sex = "";
-		sb.append(",'").append(sex).append("'");
-		
-		int age = user.getAge();
-		if(age <= 0) age = 0;
-		sb.append(",").append(age);
-		
-		String job = user.getJob();
-		if(job==null) job = "";
-		sb.append(",'").append(job).append("'");
-		
-		sb.append(",'").append(user.getHeight()).append("'");
-		sb.append(",'").append(user.getWeight()).append("'");
-		sb.append(",'").append(user.getBust()).append("'");
-		sb.append(",'").append(user.getWaist()).append("'");
-		sb.append(",'").append(user.getHip()).append("'");
-		
-		sb.append(")");
-		String sql = sb.toString();
-		System.out.println("register sql>>>  " +sql);
-		
-		initConnect();
-		int res = ConnDBC3P0.exetUpdate(stmt, sql);
-		close();
-		System.out.println("×¢²á½á¹û£ºres="+res);
-		return res>0 ? UserConfig.REG_MESSAGE_REGSUCCESS : UserConfig.REG_MESSAGE_FAILED;
-	}
-	
-	public UserBean getUer(String userName) throws SQLException{
-		UserBean user = new UserBean();
-		initConnect();
-		String sql = "select * from user where username='"+userName+"'";
-		rs = ConnDBC3P0.exetQuery(stmt, sql);
-		while(rs.next()){
-			user.setUserName(userName);
-			user.setEmail(rs.getString("email"));
-			user.setPhone(rs.getString("phone"));
-			user.setSex(rs.getString("sex"));
-			System.out.println("age>>>"+rs.getInt("age"));
-			user.setAge(rs.getInt("age"));
-			user.setJob(rs.getString("job"));
-			user.setHeight(rs.getString("height"));
-			user.setWeight(rs.getString("weight"));
-			user.setBust(rs.getString("bust"));
-			user.setWaist(rs.getString("waist"));
-			user.setHip(rs.getString("hip"));
-		}
-		close();
-		return user;
-	}
 	
 	public ArrayList<ImageBean> getAllImages(String username) throws SQLException{
 		ArrayList<ImageBean> imageList = new ArrayList<ImageBean>();
@@ -187,9 +105,5 @@ public class DatabaseDao {
 		}
 		close();
 		return imageName;
-	}
-	
-	public void close(){
-		ConnDBC3P0.close(conn, stmt, rs);
 	}
 }

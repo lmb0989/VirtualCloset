@@ -16,7 +16,7 @@ import com.virtualcloset.dbdao.DatabaseDao;
 import com.virtualcloset.model.UserBean;
 
 public class UserRegister extends HttpServlet {
-
+	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
