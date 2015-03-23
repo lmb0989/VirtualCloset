@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONHander;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 public class PostManager extends HttpServlet {
 	
@@ -23,9 +25,16 @@ public class PostManager extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		JSONHander hander = new JSONHander();
-		String json = request.getParameter("requestJson");
-		String postType = hander.getPostType(json);
+		String postType = null;
+		try{
+			String strJson = request.getParameter("requestJson");
+			JSONTokener token = new JSONTokener(strJson);
+			JSONObject jobj = (JSONObject)token.nextValue();
+			postType = jobj.getString("type");
+		}catch(JSONException ex){
+			ex.printStackTrace();
+		}
+		
 		String path = null;
 		if(postType != null){
 			if(postType.equals(POST_TYPE_LOGIN)){

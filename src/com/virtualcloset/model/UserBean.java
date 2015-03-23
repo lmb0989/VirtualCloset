@@ -39,7 +39,7 @@ public class UserBean implements PersistentObject, ObjectMapper{
 	public String waist = "";		//ÑüÎ§
 	public String hip = "";			//ÍÎÎ§
 	
-	public static DatabaseDao db= new DatabaseDao();
+	private static DatabaseDao db= new DatabaseDao();
 	
 	public UserBean(){ };
 	public UserBean(String userName, String passWord){
