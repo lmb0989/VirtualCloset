@@ -47,12 +47,12 @@ public class UserBean implements PersistentObject, ObjectMapper{
 		this.passWord = passWord;
 	}
 	
-	public UserBean(String userName, String password, String email, 
+	public UserBean(String userName, String passWord, String email, 
 			String phone, String sex, int age,  String job, 
 			String height, String weight, String bust, 
 			String waist, String hip){
         this.userName = userName;
-        this.passWord = password;
+        this.passWord = passWord;
         this.sex = sex;
         this.age = age;
         this.phone = phone;
@@ -82,7 +82,7 @@ public class UserBean implements PersistentObject, ObjectMapper{
 	        this.weight = TransferUtil.null2String(json.getString(JSON_KEY_WEIGHT));
 	        this.height = TransferUtil.null2String(json.getString(JSON_KEY_HEIGHT));
 		}catch(JSONException ex){
-			ex.printStackTrace();
+//			ex.printStackTrace();
 		}
     }
 	
@@ -148,13 +148,17 @@ public class UserBean implements PersistentObject, ObjectMapper{
 	
 	public UserBean query(){
 		String sql = "select * from user where username='"+userName+"'";
-		return (UserBean)db.query(sql, this);
+		return (UserBean)db.query(sql, new UserBean());
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<UserBean> getAllUser(){
 		String sql = "select * from user";
-		return (List<UserBean>)db.queryList(sql, this);
+		List<UserBean> allUser = (List<UserBean>)db.queryList(sql, new UserBean());
+		for(UserBean user : allUser){
+			System.out.println("userName:"+user.userName);
+		}
+		return allUser;
 	}
 	
 	public boolean isUserNameExist(){
@@ -180,6 +184,8 @@ public class UserBean implements PersistentObject, ObjectMapper{
 	public int login(){
 		UserBean user = query();
 		if(user == null) return LOGIN_MESSAGE_USERNOTEXIST;
+		System.out.println("sql user.password"+user.passWord);
+		System.out.println("user.password"+this.passWord);
 		if(!user.passWord.equals(this.passWord)) return LOGIN_MESSAGE_PASSWRONG;
 		return LOGIN_MESSAGE_LOGINSUCCESS;
 	}
@@ -203,7 +209,29 @@ public class UserBean implements PersistentObject, ObjectMapper{
 		}
 	}
 	
-	public Object mapping(ResultSet rs) {
+	public JSONObject getUserInfo(){
+		try{
+			JSONObject jobj = new JSONObject();
+			jobj.put(JSON_KEY_USERNAME, this.userName);
+			jobj.put(JSON_KEY_PASSWORD, this.passWord);
+			jobj.put(JSON_KEY_SEX, this.sex);
+			jobj.put(JSON_KEY_AGE, this.age);
+			jobj.put(JSON_KEY_PHONE, this.phone);
+			jobj.put(JSON_KEY_EMAIL, this.email);
+			jobj.put(JSON_KEY_JOB, this.job);
+			jobj.put(JSON_KEY_BUST, this.bust);
+			jobj.put(JSON_KEY_WAIST, this.waist);
+			jobj.put(JSON_KEY_HIPS, this.hip);
+			jobj.put(JSON_KEY_HEIGHT, this.height);
+			jobj.put(JSON_KEY_WEIGHT, this.weight);
+			return jobj;
+		}catch(JSONException ex){
+			ex.printStackTrace();
+			return null;
+		}
+	}
+	
+	public UserBean mapping(ResultSet rs) {
         try {
         	this.userName = rs.getString("username");
         	this.passWord = rs.getString("password");
@@ -221,5 +249,22 @@ public class UserBean implements PersistentObject, ObjectMapper{
 			e.printStackTrace();
 		}
 		return this;
+	}
+	
+	public UserBean clone(){
+		UserBean user = new UserBean();
+		user.userName = this.userName;
+		user.passWord = this.passWord;
+		user.sex = this.sex;
+		user.age = this.age;
+		user.phone = this.phone;
+		user.email = this.email;
+		user.job = this.job;
+		user.bust = this.bust;
+		user.waist = this.waist;
+		user.hip = this.hip;
+		user.height = this.height;
+		user.weight = this.weight;
+		return user;
 	}
 }

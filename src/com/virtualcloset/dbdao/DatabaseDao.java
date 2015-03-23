@@ -47,7 +47,7 @@ public class DatabaseDao {
 			initConnect();
 			rs = ConnDBC3P0.exetQuery(stmt, sql);
 			while(rs.next()){
-				obj = mapper.mapping(rs);
+				obj = mapper.mapping(rs).clone();
 				list.add(obj);
 			}
 		} catch (SQLException e) {
@@ -60,39 +60,10 @@ public class DatabaseDao {
 	
 	public int update(String sql){
 		int res = 0;
-		try {
-			initConnect();
-			res = ConnDBC3P0.exetUpdate(stmt, sql);
-			conn.commit();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close();
-		}
-		return res;
-	}
-	
-	
-	public ArrayList<ImageBean> getAllImages(String username) throws SQLException{
-		ArrayList<ImageBean> imageList = new ArrayList<ImageBean>();
 		initConnect();
-		String sql = "select * from images where username='" + username +"'";
-		rs = ConnDBC3P0.exetQuery(stmt, sql);
-		while(rs.next()){
-			ImageBean image = new ImageBean();
-			image.setImageId(rs.getInt("imageid"));
-			image.setImageName(rs.getString("imagename"));
-			image.setImageSize(rs.getInt("size"));
-			String labels[] = rs.getString("labels").split("|");
-			ArrayList<String> imageLabels = new ArrayList<String>();
-			for(String label : labels){
-				imageLabels.add(label);
-			}
-			image.setImageLabels(imageLabels);
-			imageList.add(image);
-		}
+		res = ConnDBC3P0.exetUpdate(stmt, sql);
 		close();
-		return imageList;
+		return res;
 	}
 	
 	public String getImageName(int imageId) throws SQLException{

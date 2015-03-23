@@ -1,35 +1,35 @@
 package com.virtualcloset.model;
 
-import java.util.ArrayList;
+import java.sql.ResultSet;
 
-public class ImageBean {
-	private int imageId;
-	private String imageName;
-	private int imageSize;
-	private ArrayList<String> imageLabels;
+import com.virtualcloset.dbdao.ObjectMapper;
+
+public class ImageBean implements PersistentObject, ObjectMapper {
 	
-	public int getImageId() {
-		return imageId;
+	public int imageId;
+	public String userName = null;
+	public String imageName;
+	public int size;
+	public String style = "";
+	public String season = "";
+	public String type = "";
+	
+	
+	
+	public int create() {
+		return 0;
 	}
-	public void setImageId(int imageId) {
-		this.imageId = imageId;
+	public void delete() {
+		
 	}
-	public String getImageName() {
-		return imageName;
+	public Object query() {
+		return null;
 	}
-	public void setImageName(String imageName) {
-		this.imageName = imageName;
+	public void update() {
+		
 	}
-	public int getImageSize() {
-		return imageSize;
+	public ObjectMapper mapping(ResultSet rs) {
+		return null;
 	}
-	public void setImageSize(int imageSize) {
-		this.imageSize = imageSize;
-	}
-	public ArrayList<String> getImageLabels() {
-		return imageLabels;
-	}
-	public void setImageLabels(ArrayList<String> imageLabels) {
-		this.imageLabels = imageLabels;
-	}
+	
 }

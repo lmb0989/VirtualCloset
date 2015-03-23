@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONException;
 import org.json.JSONHander;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -19,6 +20,8 @@ import com.virtualcloset.model.UserBean;
 import com.virtualcloset.util.UserUtil;
 
 public class UserLogin extends HttpServlet {
+	
+	UserBean user;
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -31,15 +34,17 @@ public class UserLogin extends HttpServlet {
 //        JSONHander hander = new JSONHander();
 //        DatabaseDao dao = new DatabaseDao();
 //        UserBean user = hander.getLoginUser(strJson);
-        
-        JSONTokener jsonParser = new JSONTokener(strJson);
-		JSONObject jobj = (JSONObject) jsonParser.nextValue();
-		String userName = jobj.getString("username");
-        
-        int userType = UserUtil.getUserType(userName);
-        UserBean user = new UserBean(jobj); 
         int loginResult;
         try {
+	        JSONTokener jsonParser = new JSONTokener(strJson);
+			JSONObject jobj = (JSONObject) jsonParser.nextValue();
+			String userName = jobj.getString("username");
+	        
+	        int userType = UserUtil.getUserType(userName);
+	        user = new UserBean(jobj); 
+	        System.out.println("password = "+user.passWord);
+	        System.out.println("userType = "+userType);
+	        
 	        if(userType == UserUtil.TYPE_USEREMAIL){
 	        	userName = UserBean.getUserName("email", userName);
 	        	if(userName.isEmpty()){
