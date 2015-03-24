@@ -17,8 +17,8 @@
     <servlet-class>com.virtualcloset.servlet.PostManager</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>FetchUserInfo</servlet-name>
-    <servlet-class>com.virtualcloset.servlet.FetchUserInfo</servlet-class>
+    <servlet-name>FetchInfo</servlet-name>
+    <servlet-class>com.virtualcloset.servlet.FetchInfo</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>UploadFile</servlet-name>
@@ -29,8 +29,8 @@
     <servlet-class>com.virtualcloset.servlet.DownloadFile</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>ListNeedResource</servlet-name>
-    <servlet-class>com.virtualcloset.servlet.ListNeedResource</servlet-class>
+    <servlet-name>ListUserImage</servlet-name>
+    <servlet-class>com.virtualcloset.servlet.ListUserImage</servlet-class>
   </servlet>
 
 
@@ -47,8 +47,8 @@
     <url-pattern>/manager</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>FetchUserInfo</servlet-name>
-    <url-pattern>/fetchUserInfo</url-pattern>
+    <servlet-name>FetchInfo</servlet-name>
+    <url-pattern>/fetchInfo</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>UploadFile</servlet-name>
@@ -59,8 +59,8 @@
     <url-pattern>/downloadfile</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>ListNeedResource</servlet-name>
-    <url-pattern>/listNeedResource</url-pattern>
+    <servlet-name>ListUserImage</servlet-name>
+    <url-pattern>/listUserImage</url-pattern>
   </servlet-mapping>
   
   <welcome-file-list>

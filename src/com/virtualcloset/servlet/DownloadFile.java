@@ -11,28 +11,30 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONHander;
+import org.json.JSONException;
 
 import com.virtualcloset.dbdao.DatabaseDao;
+import com.virtualcloset.model.ImageBean;
 
 public class DownloadFile extends HttpServlet {
 
+	ImageBean image;
+	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
+		String fileName = null;
 		String requestJson = request.getParameter("requestJson");
-        JSONHander hander = new JSONHander();
-        String fileName = null;
-        int imageId = hander.getImageID(requestJson);
-        
-        if(imageId > -1){
-        	try {
-        		fileName = (new DatabaseDao()).getImageName(imageId);
-			} catch (SQLException e){
-				e.printStackTrace();
+		try {
+			image = new ImageBean(requestJson);
+			image = image.query();
+			if(image != null){
+				fileName = image.fileName;
 			}
-        }
-        
+		} catch (JSONException e1) {
+			e1.printStackTrace();
+		}
+		
 		try {
 //			String fileName ="Screenshot_2015-03-04-10-46-08.png";
 		  	String filepath = request.getSession().getServletContext().getRealPath("/upload");

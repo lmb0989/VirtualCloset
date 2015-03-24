@@ -10,12 +10,13 @@ import org.json.JSONTokener;
 
 import com.virtualcloset.dbdao.DatabaseDao;
 import com.virtualcloset.dbdao.ObjectMapper;
+import com.virtualcloset.util.TransferUtil;
 
 public class ImageBean implements PersistentObject, ObjectMapper {
 	
     private static final String JSON_KEY_IMAGEID = "imageid";
-    private static final String JSON_KEY_USERNAME = "userName";
-    private static final String JSON_KEY_IMAGENAME = "imageName";
+    private static final String JSON_KEY_USERNAME = "username";
+    private static final String JSON_KEY_IMAGENAME = "imagename";
     private static final String JSON_KEY_SIZE = "size";
     private static final String JSON_KEY_STYLE = "style";
     private static final String JSON_KEY_SEASON = "season";
@@ -25,11 +26,11 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 	public String userName = null;
 	public String imageName = "";
 	public int size;
-	public String style = "";		//风格
+	public String style = "";			//风格
 	public String season = "";		//适合季节
-	public String type = "";		//类型
+	public String type = "";			//类型
+	public String fileName = "";
 //	public String labels = "";
-//	public String location = "";
 	
 	private static DatabaseDao db= new DatabaseDao();
 	
@@ -49,16 +50,51 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 	}
 	
 	public ImageBean(JSONObject jobj){
-		try {
-			this.userName = jobj.getString(JSON_KEY_USERNAME);
-			this.imageName = jobj.getString(JSON_KEY_IMAGENAME);
-			this.size = jobj.getInt(JSON_KEY_SIZE);
-			this.style = jobj.getString(JSON_KEY_STYLE);
-			this.season = jobj.getString(JSON_KEY_SEASON);
-			this.type = jobj.getString(JSON_KEY_TYPE);
-		} catch (JSONException e) {
-			e.printStackTrace();
+		this.imageId = getInt(jobj, JSON_KEY_IMAGEID);
+		this.userName = getString(jobj, JSON_KEY_USERNAME);
+		this.imageName = getString(jobj, JSON_KEY_IMAGENAME);
+		this.size = getInt(jobj, JSON_KEY_SIZE);
+		this.style = getString(jobj, JSON_KEY_STYLE);
+		this.season = getString(jobj, JSON_KEY_SEASON);
+		this.type = getString(jobj, JSON_KEY_TYPE);
+	}
+	
+	public void setImageBean(String strJson){
+		try{
+			setImageBean((JSONObject)(new JSONTokener(strJson)).nextValue());
+		}catch(JSONException e){}
+	}
+	
+	public void setImageBean(JSONObject jobj){
+			this.imageId = getInt(jobj, JSON_KEY_IMAGEID);
+			this.userName = getString(jobj, JSON_KEY_USERNAME);
+			this.imageName = getString(jobj, JSON_KEY_IMAGENAME);
+			this.size = getInt(jobj, JSON_KEY_SIZE);
+			this.style = getString(jobj, JSON_KEY_STYLE);
+			this.season = getString(jobj, JSON_KEY_SEASON);
+			this.type = getString(jobj, JSON_KEY_TYPE);
+	}
+	
+	private String getString(JSONObject jobj, String key){
+		if(jobj.has(key)){
+			try {
+				return jobj.getString(key);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 		}
+		return "";
+	}
+	
+	private int getInt(JSONObject jobj, String key){
+		if(jobj.has(key)){
+			try {
+				return jobj.getInt(key);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		return 0;
 	}
 	
 	public int create() {
@@ -67,10 +103,11 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		sb.append("NULL");
 		sb.append(",'").append(this.userName).append("'");
 		sb.append(",'").append(this.imageName).append("'");
-		sb.append(",'").append(this.size).append("'");
+		sb.append(",").append(this.size);
 		sb.append(",'").append(this.style).append("'");
 		sb.append(",'").append(this.season).append("'");
 		sb.append(",'").append(this.type).append("'");
+		sb.append(",'").append(this.fileName).append("'");
 		sb.append(")");
 		String sql = sb.toString();
 		int result = db.update(sql);
@@ -83,9 +120,9 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		db.update(sql);
 	}
 	
-	public Object query() {
+	public ImageBean query() {
 		String sql = "select * from images where imageid="+imageId;
-		return (UserBean)db.query(sql, new ImageBean());
+		return (ImageBean)db.query(sql, new ImageBean());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -114,6 +151,33 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		db.update(sql);
 	}
 	
+	public JSONObject createMessage(int message){
+		try{
+			JSONObject jobj = new JSONObject();
+			jobj.put("username", this.userName);
+			jobj.put("message", message);
+			return jobj;
+		}catch(JSONException ex){
+			ex.printStackTrace();
+			return null;
+		}
+	}
+	
+	public JSONObject getImageInfo(){
+		ImageBean image = query();
+		JSONObject jsonObj = new JSONObject();
+		try{
+			jsonObj.put("imageid", image.imageId);
+			jsonObj.put("imagename", image.imageName);
+			jsonObj.put("username", image.userName);
+			jsonObj.put("season", image.season);
+			jsonObj.put("size", image.size);
+			jsonObj.put("style", image.style);
+			jsonObj.put("type", image.type);
+		}catch(JSONException e){ }
+		return jsonObj;
+	}
+	
 	public ObjectMapper mapping(ResultSet rs) {
 		try {
 			this.imageId = rs.getInt("imageid");
@@ -123,6 +187,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
         	this.size = rs.getInt("size");
         	this.style = rs.getString("style");
         	this.type = rs.getString("type");
+        	this.fileName = rs.getString("filename");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -138,6 +203,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		image.size = this.size;
 		image.style = this.style;
 		image.type = this.style;
+		image.fileName = this.fileName;
 		return image;
 	}
 }

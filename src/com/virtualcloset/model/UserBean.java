@@ -210,20 +210,21 @@ public class UserBean implements PersistentObject, ObjectMapper{
 	}
 	
 	public JSONObject getUserInfo(){
+		UserBean user = query();
 		try{
 			JSONObject jobj = new JSONObject();
-			jobj.put(JSON_KEY_USERNAME, this.userName);
-			jobj.put(JSON_KEY_PASSWORD, this.passWord);
-			jobj.put(JSON_KEY_SEX, this.sex);
-			jobj.put(JSON_KEY_AGE, this.age);
-			jobj.put(JSON_KEY_PHONE, this.phone);
-			jobj.put(JSON_KEY_EMAIL, this.email);
-			jobj.put(JSON_KEY_JOB, this.job);
-			jobj.put(JSON_KEY_BUST, this.bust);
-			jobj.put(JSON_KEY_WAIST, this.waist);
-			jobj.put(JSON_KEY_HIPS, this.hip);
-			jobj.put(JSON_KEY_HEIGHT, this.height);
-			jobj.put(JSON_KEY_WEIGHT, this.weight);
+			jobj.put(JSON_KEY_USERNAME, user.userName);
+			jobj.put(JSON_KEY_PASSWORD, user.passWord);
+			jobj.put(JSON_KEY_SEX, user.sex);
+			jobj.put(JSON_KEY_AGE, user.age);
+			jobj.put(JSON_KEY_PHONE, user.phone);
+			jobj.put(JSON_KEY_EMAIL, user.email);
+			jobj.put(JSON_KEY_JOB, user.job);
+			jobj.put(JSON_KEY_BUST, user.bust);
+			jobj.put(JSON_KEY_WAIST, user.waist);
+			jobj.put(JSON_KEY_HIPS, user.hip);
+			jobj.put(JSON_KEY_HEIGHT, user.height);
+			jobj.put(JSON_KEY_WEIGHT, user.weight);
 			return jobj;
 		}catch(JSONException ex){
 			ex.printStackTrace();

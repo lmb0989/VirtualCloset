@@ -46,15 +46,7 @@ public class ListUserImage extends HttpServlet {
 				out.flush();
 				out.close();
 			}else{
-				JSONObject jsonObj = new JSONObject();
-				jsonObj.put("imageid", image.imageId);
-				jsonObj.put("imagename", image.imageName);
-				jsonObj.put("username", image.userName);
-				jsonObj.put("season", image.season);
-				jsonObj.put("size", image.size);
-				jsonObj.put("style", image.style);
-				jsonObj.put("type", image.type);
-				out.print(jsonObj.toString());
+				out.print(image.getImageInfo().toString());
 				out.flush();
 				out.close();
 			}

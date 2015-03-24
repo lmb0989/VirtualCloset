@@ -1,7 +1,6 @@
 package com.virtualcloset.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,13 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONException;
-import org.json.JSONHander;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import com.virtualcloset.config.UserConfig;
-import com.virtualcloset.dbdao.DatabaseDao;
 import com.virtualcloset.model.UserBean;
 import com.virtualcloset.util.UserUtil;
 
