@@ -59,22 +59,6 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		this.type = getString(jobj, JSON_KEY_TYPE);
 	}
 	
-	public void setImageBean(String strJson){
-		try{
-			setImageBean((JSONObject)(new JSONTokener(strJson)).nextValue());
-		}catch(JSONException e){}
-	}
-	
-	public void setImageBean(JSONObject jobj){
-			this.imageId = getInt(jobj, JSON_KEY_IMAGEID);
-			this.userName = getString(jobj, JSON_KEY_USERNAME);
-			this.imageName = getString(jobj, JSON_KEY_IMAGENAME);
-			this.size = getInt(jobj, JSON_KEY_SIZE);
-			this.style = getString(jobj, JSON_KEY_STYLE);
-			this.season = getString(jobj, JSON_KEY_SEASON);
-			this.type = getString(jobj, JSON_KEY_TYPE);
-	}
-	
 	private String getString(JSONObject jobj, String key){
 		if(jobj.has(key)){
 			try {

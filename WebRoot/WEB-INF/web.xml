@@ -29,9 +29,10 @@
     <servlet-class>com.virtualcloset.servlet.DownloadFile</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>ListUserImage</servlet-name>
-    <servlet-class>com.virtualcloset.servlet.ListUserImage</servlet-class>
+    <servlet-name>FetchIDS</servlet-name>
+    <servlet-class>com.virtualcloset.servlet.FetchIDS</servlet-class>
   </servlet>
+
 
 
   <servlet-mapping>
@@ -59,8 +60,8 @@
     <url-pattern>/downloadfile</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>ListUserImage</servlet-name>
-    <url-pattern>/listUserImage</url-pattern>
+    <servlet-name>FetchIDS</servlet-name>
+    <url-pattern>Fetchids</url-pattern>
   </servlet-mapping>
   
   <welcome-file-list>

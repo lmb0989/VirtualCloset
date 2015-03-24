@@ -16,18 +16,26 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import com.virtualcloset.model.ImageBean;
 
 public class UploadFile extends HttpServlet {
 	
-	ImageBean image = new ImageBean();
-	
 	private static final int UPLOAD_MESSAGE_SUCCESS = 0;
 	private static final int UPLOAD_MESSAGE_FAIL = 1;
 
+	String strJson = "";
+	String uploadFileName = "";
+	String serverFileName = "";
+	int size = 0;
+	String path = "";
+	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 
 		response.setContentType("text/html");
 		response.setCharacterEncoding("utf-8");
@@ -38,7 +46,7 @@ public class UploadFile extends HttpServlet {
 
         request.setCharacterEncoding("utf-8");
         DiskFileItemFactory factory = new DiskFileItemFactory();
-        String path = request.getSession().getServletContext().getRealPath("/upload");
+        path = request.getSession().getServletContext().getRealPath("/upload");
         String temp = request.getSession().getServletContext().getRealPath("/")+"temp";   //临时目录
         factory.setRepository(new File(temp));
         factory.setSizeThreshold(1024*1024);
@@ -49,28 +57,19 @@ public class UploadFile extends HttpServlet {
             List<FileItem> list = (List<FileItem>)upload.parseRequest(request);
             for(FileItem item:list){
                 if(item.isFormField()){
-                    String strJson = item.getString();
-                    image.setImageBean(strJson);
-                    System.out.println("UploadFile.java strJson>>>"+strJson);
-                    System.out.println("UploadFile.java image.imageName>>>"+image.imageName);
-                    System.out.println("UploadFile.java image.userName>>>"+image.userName);
-                    System.out.println("UploadFile.java image.type>>>"+image.type);
-                    System.out.println("UploadFile.java image.style>>>"+image.style);
-                    System.out.println("UploadFile.java image.season>>>"+image.season);
+                    strJson = item.getString();
                 }  
                 else{   
-                	image.size = (int)item.getSize();
+                	size = (int)item.getSize();
                     String value = item.getName();
                     int start = value.lastIndexOf("\\");  
-                    String uploadFileName = value.substring(start+1);
-                    image.imageName = uploadFileName;
+                    uploadFileName = value.substring(start+1);
                       
                     /*第三方提供的方法直接写到文件中。 
                      * item.write(new File(path,filename));*/  
                     //收到写到接收的文件中
-                    String fileName = System.currentTimeMillis() + "-" + uploadFileName;
-                    image.fileName = fileName;
-                    OutputStream output = new FileOutputStream(new File(path,fileName));  
+                    serverFileName = System.currentTimeMillis() + "-" + uploadFileName;
+                    OutputStream output = new FileOutputStream(new File(path,serverFileName));  
                     InputStream in = item.getInputStream();  
                       
                     int length = 0;  
@@ -84,22 +83,41 @@ public class UploadFile extends HttpServlet {
         }catch(Exception e){
             e.printStackTrace(); 
         }
-        int result = image.create();
-        boolean isFileExist = (new File(path, image.fileName)).exists();
-        if(result>0 && isFileExist){
-        	out.print(image.createMessage(UPLOAD_MESSAGE_SUCCESS));
-        }else{
-        	out.print(image.createMessage(UPLOAD_MESSAGE_FAIL));
-        }
         
+        JSONObject messageJson = null;
+        try{
+        	JSONTokener token = new JSONTokener(strJson);
+        	JSONObject jobj = (JSONObject)token.nextValue();
+        	String uploadType = jobj.getString("upload_type");
+        	if(uploadType.equals("uploadimage")){
+        		messageJson = uploadImage(jobj);
+        	}else{
+        		//////////////////////////////////////
+        	}
+        }catch(JSONException e){ }
+        
+        out.print(messageJson.toString());
 		out.flush();
 		out.close();
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		doGet(request, response);
 	}
 
+	public JSONObject uploadImage(JSONObject jobj){
+		ImageBean image = new ImageBean(jobj);
+    	image.size = size;
+    	image.imageName = uploadFileName;
+    	image.fileName = serverFileName;
+    	int result = image.create();
+    	boolean isFileExist = (new File(path, image.fileName)).exists();
+    	if(result>0 && isFileExist){
+    		return image.createMessage(UPLOAD_MESSAGE_SUCCESS);
+    	}else{
+    		return image.createMessage(UPLOAD_MESSAGE_FAIL);
+    	}
+	}
+	
 }

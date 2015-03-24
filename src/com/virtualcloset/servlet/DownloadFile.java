@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,20 +12,35 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 
-import com.virtualcloset.dbdao.DatabaseDao;
 import com.virtualcloset.model.ImageBean;
 
 public class DownloadFile extends HttpServlet {
 
-	ImageBean image;
+	String requestJson = "";
+	String fileName = "";
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		String fileName = null;
-		String requestJson = request.getParameter("requestJson");
+		String downloadType = request.getParameter("downloadtype");
+		requestJson = request.getParameter("requestJson");
+		if(downloadType.equals("downloadimage")){
+			setImageFileName();
+		}else{
+			
+		}
+		sendFile(request, response);
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		doGet(request, response);
+	}
+	
+	public void setImageFileName(){
 		try {
-			image = new ImageBean(requestJson);
+			ImageBean image = new ImageBean(requestJson);
 			image = image.query();
 			if(image != null){
 				fileName = image.fileName;
@@ -34,7 +48,9 @@ public class DownloadFile extends HttpServlet {
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
-		
+	}
+
+	public void sendFile(HttpServletRequest request, HttpServletResponse response){
 		try {
 //			String fileName ="Screenshot_2015-03-04-10-46-08.png";
 		  	String filepath = request.getSession().getServletContext().getRealPath("/upload");
@@ -58,11 +74,4 @@ public class DownloadFile extends HttpServlet {
 			  System.out.println("系统错误，请及时与管理员联系");
 		  }
 	}
-
-	public void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		doGet(request, response);
-	}
-
 }
