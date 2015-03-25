@@ -110,7 +110,7 @@ public class UploadFile extends HttpServlet {
 		ImageBean image = new ImageBean(jobj);
     	image.size = size;
     	image.imageName = uploadFileName;
-    	image.fileName = serverFileName;
+    	image.fileName = path + "/" + serverFileName;
     	int result = image.create();
     	boolean isFileExist = (new File(path, image.fileName)).exists();
     	if(result>0 && isFileExist){

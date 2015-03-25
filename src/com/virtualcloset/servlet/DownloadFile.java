@@ -58,12 +58,11 @@ public class DownloadFile extends HttpServlet {
 	public void sendFile(HttpServletRequest request, HttpServletResponse response){
 		try {
 //			String fileName ="Screenshot_2015-03-04-10-46-08.png";
-		  	String filepath = request.getSession().getServletContext().getRealPath("/upload");
 			response.setContentType("text/html");
 			response.setHeader("Location",fileName);
 			response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 			OutputStream outputStream = response.getOutputStream();
-			InputStream inputStream = new FileInputStream(filepath+"/"+fileName);
+			InputStream inputStream = new FileInputStream(fileName);
 			byte[] buffer = new byte[1024];
 			int i = -1;
 			while ((i = inputStream.read(buffer)) != -1) {

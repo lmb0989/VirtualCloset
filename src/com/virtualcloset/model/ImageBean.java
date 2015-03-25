@@ -12,6 +12,7 @@ import org.json.JSONTokener;
 import com.virtualcloset.dbdao.DatabaseDao;
 import com.virtualcloset.dbdao.ObjectMapper;
 import com.virtualcloset.dbdao.PersistentObject;
+import com.virtualcloset.util.JSONUtil;
 import com.virtualcloset.util.StringUtil;
 
 public class ImageBean implements PersistentObject, ObjectMapper {
@@ -55,36 +56,14 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 	}
 	
 	public ImageBean(JSONObject jobj){
-		this.imageId = getInt(jobj, JSON_KEY_IMAGEID);
-		this.userName = getString(jobj, JSON_KEY_USERNAME);
-		this.imageName = getString(jobj, JSON_KEY_IMAGENAME);
-		this.size = getInt(jobj, JSON_KEY_SIZE);
-		this.style = getString(jobj, JSON_KEY_STYLE);
-		this.season = getString(jobj, JSON_KEY_SEASON);
-		this.videoIDS = StringUtil.String2List(getString(jobj, JSON_KEY_VIDEOIDS), "|");
-		this.type = getString(jobj, JSON_KEY_TYPE);
-	}
-	
-	private String getString(JSONObject jobj, String key){
-		if(jobj.has(key)){
-			try {
-				return jobj.getString(key);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-		return "";
-	}
-	
-	private int getInt(JSONObject jobj, String key){
-		if(jobj.has(key)){
-			try {
-				return jobj.getInt(key);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-		return 0;
+		this.imageId = JSONUtil.getInt(jobj, JSON_KEY_IMAGEID);
+		this.userName = JSONUtil.getString(jobj, JSON_KEY_USERNAME);
+		this.imageName = JSONUtil.getString(jobj, JSON_KEY_IMAGENAME);
+		this.size = JSONUtil.getInt(jobj, JSON_KEY_SIZE);
+		this.style = JSONUtil.getString(jobj, JSON_KEY_STYLE);
+		this.season = JSONUtil.getString(jobj, JSON_KEY_SEASON);
+		this.videoIDS = StringUtil.string2List(JSONUtil.getString(jobj, JSON_KEY_VIDEOIDS), "|");
+		this.type = JSONUtil.getString(jobj, JSON_KEY_TYPE);
 	}
 	
 	public int create() {
@@ -97,16 +76,13 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		sb.append(",'").append(this.style).append("'");
 		sb.append(",'").append(this.season).append("'");
 		sb.append(",'").append(this.type).append("'");
-		String videoIds;
-		for(int id : videoIDS){
-			vidwoIds
-		}
+		sb.append(",'").append(StringUtil.list2String(videoIDS, "|")).append("'");
 		sb.append(",'").append(this.fileName).append("'");
 		sb.append(")");
 		String sql = sb.toString();
 		int result = db.update(sql);
 		System.out.println("sql: "+sql);
-		return 0;
+		return result;
 	}
 	
 	public void delete() {
@@ -139,6 +115,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		sb.append(",").append("style='").append(this.style).append("'");
 		sb.append(",").append("season='").append(this.season).append("'");
 		sb.append(",").append("type='").append(this.type).append("'");
+		sb.append(",").append("videoidS='").append(StringUtil.list2String(this.videoIDS, "|")).append("'");
 		sb.append(" where imageid=").append(imageId);
 		String sql = sb.toString();
 		System.out.println("sql= "+sql);
@@ -168,6 +145,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 			jsonObj.put("size", image.size);
 			jsonObj.put("style", image.style);
 			jsonObj.put("type", image.type);
+			jsonObj.put("videoidS", StringUtil.list2String(image.videoIDS, "|"));
 		}catch(JSONException e){ }
 		return jsonObj;
 	}
@@ -181,6 +159,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
         	this.size = rs.getInt("size");
         	this.style = rs.getString("style");
         	this.type = rs.getString("type");
+        	this.videoIDS = StringUtil.string2List(rs.getString("videoidS"), "|");
         	this.fileName = rs.getString("filename");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -197,6 +176,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		image.size = this.size;
 		image.style = this.style;
 		image.type = this.style;
+		image.videoIDS = this.videoIDS;
 		image.fileName = this.fileName;
 		return image;
 	}
