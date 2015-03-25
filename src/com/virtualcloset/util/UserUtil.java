@@ -1,7 +1,5 @@
 package com.virtualcloset.util;
 
-import com.virtualcloset.config.UserConfig;
-
 public class UserUtil {
 	
 	public static final int TYPE_USERNAME  = 1;

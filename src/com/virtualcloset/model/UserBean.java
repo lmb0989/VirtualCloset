@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import com.virtualcloset.dbdao.DatabaseDao;
 import com.virtualcloset.dbdao.ObjectMapper;
+import com.virtualcloset.dbdao.PersistentObject;
 import com.virtualcloset.util.TransferUtil;
 
 public class UserBean implements PersistentObject, ObjectMapper{

@@ -1,4 +1,4 @@
-package com.virtualcloset.model;
+package com.virtualcloset.dbdao;
 
 public interface PersistentObject {
 	

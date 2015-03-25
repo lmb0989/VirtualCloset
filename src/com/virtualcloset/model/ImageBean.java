@@ -2,6 +2,7 @@ package com.virtualcloset.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONException;
@@ -10,7 +11,8 @@ import org.json.JSONTokener;
 
 import com.virtualcloset.dbdao.DatabaseDao;
 import com.virtualcloset.dbdao.ObjectMapper;
-import com.virtualcloset.util.TransferUtil;
+import com.virtualcloset.dbdao.PersistentObject;
+import com.virtualcloset.util.StringUtil;
 
 public class ImageBean implements PersistentObject, ObjectMapper {
 	
@@ -20,6 +22,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
     private static final String JSON_KEY_SIZE = "size";
     private static final String JSON_KEY_STYLE = "style";
     private static final String JSON_KEY_SEASON = "season";
+    private static final String JSON_KEY_VIDEOIDS = "videoids";
     private static final String JSON_KEY_TYPE = "type";
 	
 	public int imageId;
@@ -29,6 +32,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 	public String style = "";			//风格
 	public String season = "";		//适合季节
 	public String type = "";			//类型
+	public ArrayList<Integer> videoIDS;
 	public String fileName = "";
 //	public String labels = "";
 	
@@ -36,12 +40,13 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 	
 	public ImageBean(){ }
 	public ImageBean(String userName, String imageName, 
-			int size, String style, String season, String type){
+			int size, String style, String season,ArrayList videoIDS, String type){
 		this.userName = userName;
 		this.imageName = imageName;
 		this.size = size;
 		this.style = style;
 		this.season = season;
+		this.videoIDS = videoIDS;
 		this.type = type;
 	}
 	
@@ -56,6 +61,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		this.size = getInt(jobj, JSON_KEY_SIZE);
 		this.style = getString(jobj, JSON_KEY_STYLE);
 		this.season = getString(jobj, JSON_KEY_SEASON);
+		this.videoIDS = StringUtil.String2List(getString(jobj, JSON_KEY_VIDEOIDS), "|");
 		this.type = getString(jobj, JSON_KEY_TYPE);
 	}
 	
@@ -91,6 +97,10 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		sb.append(",'").append(this.style).append("'");
 		sb.append(",'").append(this.season).append("'");
 		sb.append(",'").append(this.type).append("'");
+		String videoIds;
+		for(int id : videoIDS){
+			vidwoIds
+		}
 		sb.append(",'").append(this.fileName).append("'");
 		sb.append(")");
 		String sql = sb.toString();

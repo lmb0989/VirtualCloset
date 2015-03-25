@@ -61,7 +61,7 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>FetchIDS</servlet-name>
-    <url-pattern>Fetchids</url-pattern>
+    <url-pattern>/fetchids</url-pattern>
   </servlet-mapping>
   
   <welcome-file-list>

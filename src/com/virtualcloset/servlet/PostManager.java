@@ -37,7 +37,7 @@ public class PostManager extends HttpServlet {
 			String strJson = request.getParameter("requestJson");
 			JSONTokener token = new JSONTokener(strJson);
 			JSONObject jobj = (JSONObject)token.nextValue();
-			postType = jobj.getString("type");
+			postType = jobj.getString("post_type");
 		}catch(JSONException ex){
 			ex.printStackTrace();
 		}

@@ -22,12 +22,13 @@ public class DownloadFile extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		String downloadType = request.getParameter("downloadtype");
+		String downloadType = (String)request.getAttribute("downloadtype");
 		requestJson = request.getParameter("requestJson");
+		System.out.println("DownloadFile  downloadType>>>"+downloadType);
 		if(downloadType.equals("downloadimage")){
 			setImageFileName();
 		}else{
-			
+			/////////////////////////////
 		}
 		sendFile(request, response);
 	}
@@ -41,9 +42,13 @@ public class DownloadFile extends HttpServlet {
 	public void setImageFileName(){
 		try {
 			ImageBean image = new ImageBean(requestJson);
+			System.out.println("DownloadFile  imageid:::"+image.imageId);
+			System.out.println("DownloadFile  userName:::"+image.userName);
+			
 			image = image.query();
 			if(image != null){
 				fileName = image.fileName;
+				System.out.println("DownloadFile  filename:::"+fileName);
 			}
 		} catch (JSONException e1) {
 			e1.printStackTrace();

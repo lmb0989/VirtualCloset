@@ -88,8 +88,8 @@ public class UploadFile extends HttpServlet {
         try{
         	JSONTokener token = new JSONTokener(strJson);
         	JSONObject jobj = (JSONObject)token.nextValue();
-        	String uploadType = jobj.getString("upload_type");
-        	if(uploadType.equals("uploadimage")){
+        	String uploadType = jobj.getString("post_type");
+        	if(uploadType.equals("upload_image")){
         		messageJson = uploadImage(jobj);
         	}else{
         		//////////////////////////////////////
