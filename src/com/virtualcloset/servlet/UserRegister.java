@@ -23,6 +23,7 @@ public class UserRegister extends HttpServlet {
 		
 		response.setContentType("text/html"); 
 		response.setCharacterEncoding("utf-8");
+		request.setCharacterEncoding("utf-8");
         PrintWriter out = response.getWriter(); 
         
         String strJson = request.getParameter("requestJson");

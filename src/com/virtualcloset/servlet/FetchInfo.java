@@ -14,6 +14,7 @@ import org.json.JSONTokener;
 
 import com.virtualcloset.model.ImageBean;
 import com.virtualcloset.model.UserBean;
+import com.virtualcloset.model.VideoBean;
 
 public class FetchInfo extends HttpServlet {
 
@@ -32,9 +33,12 @@ public class FetchInfo extends HttpServlet {
         	if(infoType.equals("userinfo")){
         		UserBean user = new UserBean(jobj);
         		out.print(user.getUserInfo().toString());
-        	}else{
+        	}else if(infoType.equals("imageinfo")){
         		ImageBean image = new ImageBean(jobj);
         		out.print(image.getImageInfo().toString());
+        	}else{
+        		VideoBean video = new VideoBean(jobj);
+        		out.print(video.getVideoInfo().toString());
         	}
 		} catch (JSONException e) {
 			e.printStackTrace();

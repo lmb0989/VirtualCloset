@@ -7,8 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.virtualcloset.model.ImageBean;
-
 public class DatabaseDao {
 	
 	private Connection conn;
@@ -33,6 +31,7 @@ public class DatabaseDao {
 				obj = mapper.mapping(rs);
 			}
 		} catch (SQLException e) {
+			System.out.println("rs==null ? "+rs==null);
 			e.printStackTrace();
 		} finally{
 			close();

@@ -20,7 +20,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import com.virtualcloset.config.DBConfig;
 import com.virtualcloset.model.ImageBean;
+import com.virtualcloset.model.VideoBean;
 
 public class UploadFile extends HttpServlet {
 	
@@ -31,12 +33,13 @@ public class UploadFile extends HttpServlet {
 	String uploadFileName = "";
 	String serverFileName = "";
 	int size = 0;
-	String path = "";
+	String path = DBConfig.imageLocation;;
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 
+		System.out.println("-------------上传文件------------------");
 		response.setContentType("text/html");
 		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();
@@ -46,7 +49,6 @@ public class UploadFile extends HttpServlet {
 
         request.setCharacterEncoding("utf-8");
         DiskFileItemFactory factory = new DiskFileItemFactory();
-        path = request.getSession().getServletContext().getRealPath("/upload");
         String temp = request.getSession().getServletContext().getRealPath("/")+"temp";   //临时目录
         factory.setRepository(new File(temp));
         factory.setSizeThreshold(1024*1024);
@@ -58,6 +60,7 @@ public class UploadFile extends HttpServlet {
             for(FileItem item:list){
                 if(item.isFormField()){
                     strJson = item.getString();
+                    System.out.println("UploadFile strJson:: "+strJson);
                 }  
                 else{   
                 	size = (int)item.getSize();
@@ -69,6 +72,7 @@ public class UploadFile extends HttpServlet {
                      * item.write(new File(path,filename));*/  
                     //收到写到接收的文件中
                     serverFileName = System.currentTimeMillis() + "-" + uploadFileName;
+                    System.out.println("UploadFile serverFileName:: "+serverFileName);
                     OutputStream output = new FileOutputStream(new File(path,serverFileName));  
                     InputStream in = item.getInputStream();  
                       
@@ -80,21 +84,28 @@ public class UploadFile extends HttpServlet {
                     in.close();
                 }
             }
+            System.out.println("循环结束");
         }catch(Exception e){
             e.printStackTrace(); 
         }
         
         JSONObject messageJson = null;
+        
         try{
         	JSONTokener token = new JSONTokener(strJson);
         	JSONObject jobj = (JSONObject)token.nextValue();
         	String uploadType = jobj.getString("post_type");
+        	System.out.println("UploadFile uploadType:: "+uploadType);
         	if(uploadType.equals("upload_image")){
         		messageJson = uploadImage(jobj);
+        		System.out.println("UploadFile messageJson:: "+messageJson.toString());
         	}else{
-        		//////////////////////////////////////
+        		messageJson = uploadVideo(jobj);
+        		System.out.println("UploadFile messageJson:: "+messageJson.toString());
         	}
-        }catch(JSONException e){ }
+        }catch(JSONException e){ 
+        	e.printStackTrace();
+        }
         
         out.print(messageJson.toString());
 		out.flush();
@@ -110,14 +121,30 @@ public class UploadFile extends HttpServlet {
 		ImageBean image = new ImageBean(jobj);
     	image.size = size;
     	image.imageName = uploadFileName;
-    	image.fileName = path + "/" + serverFileName;
+    	image.fileName = serverFileName;
+    	System.out.println("UploadFile fileName:: "+image.fileName);
     	int result = image.create();
     	boolean isFileExist = (new File(path, image.fileName)).exists();
+    	System.out.println("UploadFile result::: "+result);
+    	System.out.println("UploadFile isFileExist:: "+isFileExist);
     	if(result>0 && isFileExist){
     		return image.createMessage(UPLOAD_MESSAGE_SUCCESS);
     	}else{
     		return image.createMessage(UPLOAD_MESSAGE_FAIL);
     	}
+	}
+	
+	public JSONObject uploadVideo(JSONObject jobj){
+		VideoBean video = new VideoBean(jobj);
+		video.videoName = uploadFileName;
+		video.fileName = serverFileName;
+		int result = video.create();
+		boolean isFileExist = (new File(path, video.fileName)).exists();
+		if(result>0 && isFileExist){
+			return video.createMessage(UPLOAD_MESSAGE_SUCCESS);
+		}else{
+			return video.createMessage(UPLOAD_MESSAGE_FAIL);
+		}
 	}
 	
 }

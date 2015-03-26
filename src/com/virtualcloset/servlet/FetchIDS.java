@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import com.virtualcloset.model.ImageBean;
+import com.virtualcloset.model.VideoBean;
 
 public class FetchIDS extends HttpServlet {
 
@@ -41,7 +42,13 @@ public class FetchIDS extends HttpServlet {
 				jobj.put("image_ids", idsArray);
 				out.print(jobj.toString());
 			}else{
-				///////////////////////////////////////
+				VideoBean video = new VideoBean(jobj);
+				for(VideoBean vd : video.getUserAllVideo()){
+					idsArray.put(vd.videoId);
+				}
+				jobj.put("message", 0);
+				jobj.put("image_ids", idsArray);
+				out.print(jobj.toString());
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

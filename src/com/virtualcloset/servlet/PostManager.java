@@ -18,6 +18,7 @@ public class PostManager extends HttpServlet {
 	private static final String POST_TYPE_REGISTER = "register";
 	private static final String POST_TYPE_FETCH_USERINFO = "fetch_userinfo"; 
     private static final String POST_TYPE_FETCH_IMAGEINFO = "fetch_image_info";
+    private static final String POST_TYPE_FETCH_VIDEOINFO = "fetch_video_info";
     
 	private static final String POST_TYPE_UPLOAD_IMAGE = "upload_image";
 	private static final String POST_TYPE_UPLOAD_FILE = "upload_file";
@@ -55,6 +56,9 @@ public class PostManager extends HttpServlet {
 			}else if(postType.equals(POST_TYPE_FETCH_IMAGEINFO)){
 				path = "/fetchInfo";
 				request.setAttribute("infotype", "imageinfo");
+			}else if(postType.equals(POST_TYPE_FETCH_VIDEOINFO)){
+				path = "/fetchInfo";
+				request.setAttribute("infotype", "videoinfo");
 				
 			}else if(postType.equals(POST_TYPE_FETCH_IMAGE_IDS)){
 				path = "/fetchids";
@@ -73,7 +77,8 @@ public class PostManager extends HttpServlet {
 				path = "/downloadfile";
 				request.setAttribute("downloadtype", "downloadimage");
 			}else{
-				
+				path = "/downloadfile";
+				request.setAttribute("downloadtype", "downloadvideo");
 			}
 			if(path != null){
 				System.out.println("PostManager.java  path >>> "+path);

@@ -148,12 +148,13 @@ public class UserBean implements PersistentObject, ObjectMapper{
 	}
 	
 	public UserBean query(){
+		if(this.userName == null) return null;
 		String sql = "select * from user where username='"+userName+"'";
 		return (UserBean)db.query(sql, new UserBean());
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<UserBean> getAllUser(){
+	public static List<UserBean> getAllUser(){
 		String sql = "select * from user";
 		List<UserBean> allUser = (List<UserBean>)db.queryList(sql, new UserBean());
 		for(UserBean user : allUser){

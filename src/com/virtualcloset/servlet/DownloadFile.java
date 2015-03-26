@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 
+import com.virtualcloset.config.DBConfig;
 import com.virtualcloset.model.ImageBean;
+import com.virtualcloset.model.VideoBean;
 
 public class DownloadFile extends HttpServlet {
 
@@ -28,7 +30,7 @@ public class DownloadFile extends HttpServlet {
 		if(downloadType.equals("downloadimage")){
 			setImageFileName();
 		}else{
-			/////////////////////////////
+			setVideoFileName();
 		}
 		sendFile(request, response);
 	}
@@ -47,7 +49,23 @@ public class DownloadFile extends HttpServlet {
 			
 			image = image.query();
 			if(image != null){
-				fileName = image.fileName;
+				fileName = DBConfig.imageLocation + "/" + image.fileName;
+				System.out.println("DownloadFile  filename:::"+fileName);
+			}
+		} catch (JSONException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	public void setVideoFileName(){
+		try {
+			VideoBean video = new VideoBean(requestJson);
+			System.out.println("DownloadFile  videoid:::"+video.videoId);
+			System.out.println("DownloadFile  userName:::"+video.userName);
+			
+			video = video.query();
+			if(video != null){
+				fileName = DBConfig.imageLocation + "/" + video.fileName;
 				System.out.println("DownloadFile  filename:::"+fileName);
 			}
 		} catch (JSONException e1) {

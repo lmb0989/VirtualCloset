@@ -91,6 +91,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 	}
 	
 	public ImageBean query() {
+		if(this.imageId == 0) return null;
 		String sql = "select * from images where imageid="+imageId;
 		return (ImageBean)db.query(sql, new ImageBean());
 	}

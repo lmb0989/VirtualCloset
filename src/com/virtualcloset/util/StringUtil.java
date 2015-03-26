@@ -8,7 +8,9 @@ public class StringUtil {
 	public static ArrayList<Integer> string2List(String str, String regex){
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		for(String s : str.split(regex)){
-			list.add(Integer.parseInt(s));
+			if(!s.isEmpty()){
+				list.add(Integer.parseInt(s));
+			}
 		}
 		return list;
 	}
