@@ -65,7 +65,7 @@ public class DownloadFile extends HttpServlet {
 			
 			video = video.query();
 			if(video != null){
-				fileName = DBConfig.imageLocation + "/" + video.fileName;
+				fileName = DBConfig.vedioLocation + "/" + video.fileName;
 				System.out.println("DownloadFile  filename:::"+fileName);
 			}
 		} catch (JSONException e1) {

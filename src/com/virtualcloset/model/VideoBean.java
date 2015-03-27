@@ -56,7 +56,8 @@ public class VideoBean implements ObjectMapper, PersistentObject{
 	public int create() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("insert into videos values(");
-		sb.append("NULL");
+		int videoSize = getAllVideo().size();
+		sb.append(videoSize + 1);
 		sb.append(",'").append(this.userName).append("'");
 		sb.append(",'").append(this.videoName).append("'");
 		sb.append(",'").append(StringUtil.list2String(this.imageIDS, "|")).append("'");
@@ -81,7 +82,13 @@ public class VideoBean implements ObjectMapper, PersistentObject{
 	@SuppressWarnings("unchecked")
 	public List<VideoBean> getUserAllVideo(){
 		String sql = "select * from videos where username='"+this.userName+"'";
-		return (List<VideoBean>)db.queryList(sql, new ImageBean());
+		return (List<VideoBean>)db.queryList(sql, new VideoBean());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<VideoBean> getAllVideo(){
+		String sql = "select * from videos ";
+		return (List<VideoBean>)db.queryList(sql, new VideoBean());
 	}
 	
 	public void update(String key, String value) {
