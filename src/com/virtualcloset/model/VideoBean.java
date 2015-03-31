@@ -20,25 +20,34 @@ public class VideoBean implements ObjectMapper, PersistentObject{
     private static final String JSON_KEY_VIDEOID = "videoid";
     private static final String JSON_KEY_USERNAME = "username";
     private static final String JSON_KEY_VIDEONAME = "videoname";
+    private static final String JSON_KEY_STYLE = "style";
+    private static final String JSON_KEY_SEASON = "season";
+    private static final String JSON_KEY_TYPE = "type";
     private static final String JSON_KEY_IMAGEIDS = "imageids";
 	
 	public int videoId;
 	public String userName = null;
 	public String videoName = "";
+	public String style = "";			//风格
+	public String season = "";		//适合季节
+	public String type = "";			//类型
 	public ArrayList<Integer> imageIDS;
 	public String fileName = "";
 	
 	private static DatabaseDao db= new DatabaseDao();
 	
 	public VideoBean(){ }
-	public VideoBean(int videoId, String userName, String videoName, String imageIDS, String fileName){
-		this(videoId, userName, videoName, StringUtil.string2List(imageIDS, "|" ));
+	public VideoBean(int videoId, String userName, String videoName, String style, String season, String type, String imageIDS){
+		this(videoId, userName, videoName, style, season, type, StringUtil.string2List(imageIDS, "v" ));
 	}
 	
-	public VideoBean(int videoId, String userName, String videoName, ArrayList<Integer> imageIDS){
+	public VideoBean(int videoId, String userName, String videoName, String style, String season, String type, ArrayList<Integer> imageIDS){
 		this.videoId = videoId;
 		this.userName = userName;
 		this.videoName = videoName;
+		this.style = style;
+		this.season = season;
+		this.type = type;
 		this.imageIDS = imageIDS;
 	}
 	
@@ -50,7 +59,10 @@ public class VideoBean implements ObjectMapper, PersistentObject{
 		this.videoId = JSONUtil.getInt(jobj, JSON_KEY_VIDEOID);
 		this.userName = JSONUtil.getString(jobj, JSON_KEY_USERNAME);
 		this.videoName = JSONUtil.getString(jobj, JSON_KEY_VIDEONAME);
-		this.imageIDS = StringUtil.string2List(JSONUtil.getString(jobj, JSON_KEY_IMAGEIDS), "|");
+		this.style = JSONUtil.getString(jobj, JSON_KEY_STYLE);
+		this.season = JSONUtil.getString(jobj, JSON_KEY_SEASON);
+		this.type = JSONUtil.getString(jobj, JSON_KEY_TYPE);
+		this.imageIDS = StringUtil.string2List(JSONUtil.getString(jobj, JSON_KEY_IMAGEIDS), "v");
 	}
 
 	public int create() {
@@ -60,7 +72,10 @@ public class VideoBean implements ObjectMapper, PersistentObject{
 		sb.append(videoSize + 1);
 		sb.append(",'").append(this.userName).append("'");
 		sb.append(",'").append(this.videoName).append("'");
-		sb.append(",'").append(StringUtil.list2String(this.imageIDS, "|")).append("'");
+		sb.append(",'").append(this.style).append("'");
+		sb.append(",'").append(this.season).append("'");
+		sb.append(",'").append(this.type).append("'");
+		sb.append(",'").append(StringUtil.list2String(this.imageIDS, "v")).append("'");
 		sb.append(",'").append(this.fileName).append("'");
 		sb.append(")");
 		String sql = sb.toString();
@@ -101,7 +116,10 @@ public class VideoBean implements ObjectMapper, PersistentObject{
 		sb.append("update videos set ");
 		sb.append("username='").append(this.userName).append("'");
 		sb.append(",").append("videoname='").append(this.videoName).append("'");
-		sb.append(",").append("imageids='").append(StringUtil.list2String(this.imageIDS, "|")).append("'");
+		sb.append(",").append("style='").append(this.style).append("'");
+		sb.append(",").append("season='").append(this.season).append("'");
+		sb.append(",").append("type='").append(this.type).append("'");
+		sb.append(",").append("imageids='").append(StringUtil.list2String(this.imageIDS, "v")).append("'");
 		sb.append(" where videoid=").append(videoId);
 		String sql = sb.toString();
 		System.out.println("sql= "+sql);
@@ -127,7 +145,10 @@ public class VideoBean implements ObjectMapper, PersistentObject{
 			jsonObj.put("videoid", video.videoId);
 			jsonObj.put("videoname", video.videoName);
 			jsonObj.put("username", video.userName);
-			jsonObj.put("imageids", StringUtil.list2String(video.imageIDS, "|"));
+			jsonObj.put("style", video.style);
+			jsonObj.put("season", video.season);
+			jsonObj.put("type", video.type);
+			jsonObj.put("imageids", StringUtil.list2String(video.imageIDS, "v"));
 		}catch(JSONException e){ }
 		return jsonObj;
 	}
@@ -137,7 +158,10 @@ public class VideoBean implements ObjectMapper, PersistentObject{
 			this.videoId = rs.getInt("videoid");
         	this.userName = rs.getString("username");
         	this.videoName = rs.getString("videoname");
-        	this.imageIDS = StringUtil.string2List(rs.getString("imageids"), "|");
+        	this.style = rs.getString("style");
+        	this.season = rs.getString("season");
+        	this.type = rs.getString("type");
+        	this.imageIDS = StringUtil.string2List(rs.getString("imageids"), "v");
         	this.fileName = rs.getString("filename");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -150,6 +174,9 @@ public class VideoBean implements ObjectMapper, PersistentObject{
 		video.videoId = this.videoId;
 		video.videoName = this.videoName;
 		video.userName = this.userName;
+		video.style = this.style;
+		video.season = this.season;
+		video.type = this.type;
 		video.imageIDS = this.imageIDS;
 		video.fileName = this.fileName;
 		return video;

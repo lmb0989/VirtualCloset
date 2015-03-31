@@ -62,7 +62,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		this.size = JSONUtil.getInt(jobj, JSON_KEY_SIZE);
 		this.style = JSONUtil.getString(jobj, JSON_KEY_STYLE);
 		this.season = JSONUtil.getString(jobj, JSON_KEY_SEASON);
-		this.videoIDS = StringUtil.string2List(JSONUtil.getString(jobj, JSON_KEY_VIDEOIDS), "|");
+		this.videoIDS = StringUtil.string2List(JSONUtil.getString(jobj, JSON_KEY_VIDEOIDS), "v");
 		this.type = JSONUtil.getString(jobj, JSON_KEY_TYPE);
 	}
 	
@@ -76,7 +76,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		sb.append(",'").append(this.style).append("'");
 		sb.append(",'").append(this.season).append("'");
 		sb.append(",'").append(this.type).append("'");
-		sb.append(",'").append(StringUtil.list2String(videoIDS, "|")).append("'");
+		sb.append(",'").append(StringUtil.list2String(videoIDS, "v")).append("'");
 		sb.append(",'").append(this.fileName).append("'");
 		sb.append(")");
 		String sql = sb.toString();
@@ -116,7 +116,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		sb.append(",").append("style='").append(this.style).append("'");
 		sb.append(",").append("season='").append(this.season).append("'");
 		sb.append(",").append("type='").append(this.type).append("'");
-		sb.append(",").append("videoidS='").append(StringUtil.list2String(this.videoIDS, "|")).append("'");
+		sb.append(",").append("videoidS='").append(StringUtil.list2String(this.videoIDS, "v")).append("'");
 		sb.append(" where imageid=").append(imageId);
 		String sql = sb.toString();
 		System.out.println("sql= "+sql);
@@ -146,7 +146,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 			jsonObj.put("size", image.size);
 			jsonObj.put("style", image.style);
 			jsonObj.put("type", image.type);
-			jsonObj.put("videoidS", StringUtil.list2String(image.videoIDS, "|"));
+			jsonObj.put("videoidS", StringUtil.list2String(image.videoIDS, "v"));
 		}catch(JSONException e){ }
 		return jsonObj;
 	}
@@ -160,7 +160,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
         	this.size = rs.getInt("size");
         	this.style = rs.getString("style");
         	this.type = rs.getString("type");
-        	this.videoIDS = StringUtil.string2List(rs.getString("videoidS"), "|");
+        	this.videoIDS = StringUtil.string2List(rs.getString("videoidS"), "v");
         	this.fileName = rs.getString("filename");
 		} catch (SQLException e) {
 			e.printStackTrace();

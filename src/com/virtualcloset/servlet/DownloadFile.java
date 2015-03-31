@@ -80,6 +80,7 @@ public class DownloadFile extends HttpServlet {
 			response.setHeader("Location",fileName);
 			response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 			OutputStream outputStream = response.getOutputStream();
+			
 			InputStream inputStream = new FileInputStream(fileName);
 			byte[] buffer = new byte[1024];
 			int i = -1;

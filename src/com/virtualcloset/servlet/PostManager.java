@@ -20,14 +20,16 @@ public class PostManager extends HttpServlet {
     private static final String POST_TYPE_FETCH_IMAGEINFO = "fetch_image_info";
     private static final String POST_TYPE_FETCH_VIDEOINFO = "fetch_video_info";
     
+    private static final String POST_TYPE_DELETE_IMAGE = "delete_image";
+    
 	private static final String POST_TYPE_UPLOAD_IMAGE = "upload_image";
 	private static final String POST_TYPE_UPLOAD_FILE = "upload_file";
 	
-    private static final String POST_TYPE_FETCH_VEDIO_IDS = "fetch_vedio_ids";
+    private static final String POST_TYPE_FETCH_VEDIO_IDS = "fetch_video_ids";
     private static final String POST_TYPE_FETCH_IMAGE_IDS = "fetch_image_ids";
     
     private static final String POST_TYPE_DOWNLOAD_IMAGE = "download_image";
-    private static final String POST_TYPE_DOWNLOAD_VEDIO = "download_vedio";
+    private static final String POST_TYPE_DOWNLOAD_VIDEO = "download_video";
     private static final String POST_TYPE_DOWNLOAD_FILE = "download_file";
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -65,8 +67,11 @@ public class PostManager extends HttpServlet {
 				request.setAttribute("idstype", "imageids");
 			}else if(postType.equals(POST_TYPE_FETCH_VEDIO_IDS)){
 				path = "/fetchids";
-				request.setAttribute("idstype", "vedioids");
+				request.setAttribute("idstype", "videoids");
 				
+			}else if(postType.equals(POST_TYPE_DELETE_IMAGE)){
+//				path = "/downloadfile";
+//				request.setAttribute("downloadtype", "downloadimage");
 			}else if(postType.equals(POST_TYPE_UPLOAD_IMAGE)){
 				path = "/uploadfile";
 				request.setAttribute("uploadtype", "uploadimage");

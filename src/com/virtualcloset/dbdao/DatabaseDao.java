@@ -22,7 +22,7 @@ public class DatabaseDao {
 		ConnDBC3P0.close(conn, stmt, rs);
 	}
 	
-	public Object query(String sql, ObjectMapper mapper){
+	public synchronized Object query(String sql, ObjectMapper mapper){
 		Object obj = null;
 		try {
 			initConnect();
@@ -39,7 +39,7 @@ public class DatabaseDao {
 		return obj;
 	}
 	
-	public List<? extends Object> queryList(String sql, ObjectMapper mapper){
+	public synchronized List<? extends Object> queryList(String sql, ObjectMapper mapper){
 		Object obj = null;
 		List<Object> list = new ArrayList<Object>();
 		try {
@@ -57,23 +57,11 @@ public class DatabaseDao {
 		return list;
 	}
 	
-	public int update(String sql){
+	public synchronized int update(String sql){
 		int res = 0;
 		initConnect();
 		res = ConnDBC3P0.exetUpdate(stmt, sql);
 		close();
 		return res;
-	}
-	
-	public String getImageName(int imageId) throws SQLException{
-		String imageName = null;
-		initConnect();
-		String sql = "select * from images where imageid="+imageId;
-		rs = ConnDBC3P0.exetQuery(stmt, sql);
-		while(rs.next()){
-			imageName = rs.getString("imagename");
-		}
-		close();
-		return imageName;
 	}
 }

@@ -47,7 +47,7 @@ public class FetchIDS extends HttpServlet {
 					idsArray.put(vd.videoId);
 				}
 				jobj.put("message", 0);
-				jobj.put("image_ids", idsArray);
+				jobj.put("video_ids", idsArray);
 				out.print(jobj.toString());
 			}
 		} catch (JSONException e) {
