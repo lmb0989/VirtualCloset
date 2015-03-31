@@ -85,9 +85,9 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		return result;
 	}
 	
-	public void delete() {
+	public int delete() {
 		String sql = "delete from images where imageid="+imageId;
-		db.update(sql);
+		return db.update(sql);
 	}
 	
 	public ImageBean query() {

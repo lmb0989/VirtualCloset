@@ -116,9 +116,9 @@ public class UserBean implements PersistentObject, ObjectMapper{
 		return result>0 ? REG_MESSAGE_REGSUCCESS : REG_MESSAGE_FAILED;
 	}
 	
-	public void delete() {
+	public int delete() {
 		String sql = "delete from user where username='"+userName+"'";
-		db.update(sql);
+		return db.update(sql);
 	}
 	
 	public void update(String key, String value) {

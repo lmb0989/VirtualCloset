@@ -16,7 +16,7 @@ public interface PersistentObject {
 	
 	public void update();
 	
-	public void delete();
+	public int delete();
 	
 	public Object query();
 }

@@ -84,9 +84,9 @@ public class VideoBean implements ObjectMapper, PersistentObject{
 		return result;
 	}
 	
-	public void delete() {
+	public int delete() {
 		String sql = "delete from videos where videoid="+this.videoId;
-		db.update(sql);
+		return db.update(sql);
 	}
 	
 	public VideoBean query() {
