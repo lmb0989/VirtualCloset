@@ -70,8 +70,8 @@ public class PostManager extends HttpServlet {
 				request.setAttribute("idstype", "videoids");
 				
 			}else if(postType.equals(POST_TYPE_DELETE_IMAGE)){
-//				path = "/downloadfile";
-//				request.setAttribute("downloadtype", "downloadimage");
+				path = "/deletedata";
+				request.setAttribute("deletetype", "deleteimage");
 			}else if(postType.equals(POST_TYPE_UPLOAD_IMAGE)){
 				path = "/uploadfile";
 				request.setAttribute("uploadtype", "uploadimage");

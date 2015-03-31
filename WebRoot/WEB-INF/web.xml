@@ -32,6 +32,11 @@
     <servlet-name>FetchIDS</servlet-name>
     <servlet-class>com.virtualcloset.servlet.FetchIDS</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>DeleteData</servlet-name>
+    <servlet-class>com.virtualcloset.servlet.DeleteData</servlet-class>
+  </servlet>
+
 
 
 
@@ -62,6 +67,10 @@
   <servlet-mapping>
     <servlet-name>FetchIDS</servlet-name>
     <url-pattern>/fetchids</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DeleteData</servlet-name>
+    <url-pattern>/deletedata</url-pattern>
   </servlet-mapping>
   
   <welcome-file-list>
