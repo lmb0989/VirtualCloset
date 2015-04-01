@@ -23,31 +23,34 @@ public class VideoBean implements ObjectMapper, PersistentObject{
     private static final String JSON_KEY_STYLE = "style";
     private static final String JSON_KEY_SEASON = "season";
     private static final String JSON_KEY_TYPE = "type";
+    private static final String JSON_KEY_SITUATION = "situation";
     private static final String JSON_KEY_IMAGEIDS = "imageids";
 	
 	public int videoId;
 	public String userName = null;
 	public String videoName = "";
 	public String style = "";			//风格
-	public String season = "";		//适合季节
+	public String season = "";			//适合季节
 	public String type = "";			//类型
+	public String situation = "";		//适合场合
 	public ArrayList<Integer> imageIDS;
 	public String fileName = "";
 	
 	private static DatabaseDao db= new DatabaseDao();
 	
 	public VideoBean(){ }
-	public VideoBean(int videoId, String userName, String videoName, String style, String season, String type, String imageIDS){
-		this(videoId, userName, videoName, style, season, type, StringUtil.string2List(imageIDS, "v" ));
+	public VideoBean(int videoId, String userName, String videoName, String style, String season, String type, String situation, String imageIDS){
+		this(videoId, userName, videoName, style, season, type, situation, StringUtil.string2List(imageIDS, "v" ));
 	}
 	
-	public VideoBean(int videoId, String userName, String videoName, String style, String season, String type, ArrayList<Integer> imageIDS){
+	public VideoBean(int videoId, String userName, String videoName, String style, String season, String type,String situation, ArrayList<Integer> imageIDS){
 		this.videoId = videoId;
 		this.userName = userName;
 		this.videoName = videoName;
 		this.style = style;
 		this.season = season;
 		this.type = type;
+		this.situation = situation;
 		this.imageIDS = imageIDS;
 	}
 	
@@ -62,6 +65,7 @@ public class VideoBean implements ObjectMapper, PersistentObject{
 		this.style = JSONUtil.getString(jobj, JSON_KEY_STYLE);
 		this.season = JSONUtil.getString(jobj, JSON_KEY_SEASON);
 		this.type = JSONUtil.getString(jobj, JSON_KEY_TYPE);
+		this.situation = JSONUtil.getString(jobj, JSON_KEY_SITUATION);
 		this.imageIDS = StringUtil.string2List(JSONUtil.getString(jobj, JSON_KEY_IMAGEIDS), "v");
 	}
 
@@ -75,6 +79,7 @@ public class VideoBean implements ObjectMapper, PersistentObject{
 		sb.append(",'").append(this.style).append("'");
 		sb.append(",'").append(this.season).append("'");
 		sb.append(",'").append(this.type).append("'");
+		sb.append(",'").append(this.situation).append("'");
 		sb.append(",'").append(StringUtil.list2String(this.imageIDS, "v")).append("'");
 		sb.append(",'").append(this.fileName).append("'");
 		sb.append(")");
@@ -119,6 +124,7 @@ public class VideoBean implements ObjectMapper, PersistentObject{
 		sb.append(",").append("style='").append(this.style).append("'");
 		sb.append(",").append("season='").append(this.season).append("'");
 		sb.append(",").append("type='").append(this.type).append("'");
+		sb.append(",").append("situation='").append(this.situation).append("'");
 		sb.append(",").append("imageids='").append(StringUtil.list2String(this.imageIDS, "v")).append("'");
 		sb.append(" where videoid=").append(videoId);
 		String sql = sb.toString();
@@ -148,6 +154,7 @@ public class VideoBean implements ObjectMapper, PersistentObject{
 			jsonObj.put("style", video.style);
 			jsonObj.put("season", video.season);
 			jsonObj.put("type", video.type);
+			jsonObj.put("situation", video.situation);
 			jsonObj.put("imageids", StringUtil.list2String(video.imageIDS, "v"));
 		}catch(JSONException e){ }
 		return jsonObj;
@@ -161,6 +168,7 @@ public class VideoBean implements ObjectMapper, PersistentObject{
         	this.style = rs.getString("style");
         	this.season = rs.getString("season");
         	this.type = rs.getString("type");
+        	this.situation = rs.getString("situation");
         	this.imageIDS = StringUtil.string2List(rs.getString("imageids"), "v");
         	this.fileName = rs.getString("filename");
 		} catch (SQLException e) {
@@ -177,6 +185,7 @@ public class VideoBean implements ObjectMapper, PersistentObject{
 		video.style = this.style;
 		video.season = this.season;
 		video.type = this.type;
+		video.situation = this.situation;
 		video.imageIDS = this.imageIDS;
 		video.fileName = this.fileName;
 		return video;

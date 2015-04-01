@@ -23,16 +23,18 @@ public class ImageBean implements PersistentObject, ObjectMapper {
     private static final String JSON_KEY_SIZE = "size";
     private static final String JSON_KEY_STYLE = "style";
     private static final String JSON_KEY_SEASON = "season";
-    private static final String JSON_KEY_VIDEOIDS = "videoids";
     private static final String JSON_KEY_TYPE = "type";
+    private static final String JSON_KEY_SITUATION = "situation";
+    private static final String JSON_KEY_VIDEOIDS = "videoids";
 	
 	public int imageId;
 	public String userName = null;
 	public String imageName = "";
 	public int size;
 	public String style = "";			//风格
-	public String season = "";		//适合季节
+	public String season = "";			//适合季节
 	public String type = "";			//类型
+	public String situation = "";		//适合场合
 	public ArrayList<Integer> videoIDS;
 	public String fileName = "";
 //	public String labels = "";
@@ -41,14 +43,15 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 	
 	public ImageBean(){ }
 	public ImageBean(String userName, String imageName, 
-			int size, String style, String season,ArrayList videoIDS, String type){
+			int size, String style, String season, String type, String situation, ArrayList<Integer> videoIDS){
 		this.userName = userName;
 		this.imageName = imageName;
 		this.size = size;
 		this.style = style;
 		this.season = season;
-		this.videoIDS = videoIDS;
 		this.type = type;
+		this.situation = situation;
+		this.videoIDS = videoIDS;
 	}
 	
 	public ImageBean(String strJSON) throws JSONException{
@@ -62,8 +65,9 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		this.size = JSONUtil.getInt(jobj, JSON_KEY_SIZE);
 		this.style = JSONUtil.getString(jobj, JSON_KEY_STYLE);
 		this.season = JSONUtil.getString(jobj, JSON_KEY_SEASON);
-		this.videoIDS = StringUtil.string2List(JSONUtil.getString(jobj, JSON_KEY_VIDEOIDS), "v");
 		this.type = JSONUtil.getString(jobj, JSON_KEY_TYPE);
+		this.situation = JSONUtil.getString(jobj, JSON_KEY_SITUATION);
+		this.videoIDS = StringUtil.string2List(JSONUtil.getString(jobj, JSON_KEY_VIDEOIDS), "v");
 	}
 	
 	public int create() {
@@ -76,6 +80,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		sb.append(",'").append(this.style).append("'");
 		sb.append(",'").append(this.season).append("'");
 		sb.append(",'").append(this.type).append("'");
+		sb.append(",'").append(this.situation).append("'");
 		sb.append(",'").append(StringUtil.list2String(videoIDS, "v")).append("'");
 		sb.append(",'").append(this.fileName).append("'");
 		sb.append(")");
@@ -116,6 +121,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		sb.append(",").append("style='").append(this.style).append("'");
 		sb.append(",").append("season='").append(this.season).append("'");
 		sb.append(",").append("type='").append(this.type).append("'");
+		sb.append(",").append("situation='").append(this.situation).append("'");
 		sb.append(",").append("videoidS='").append(StringUtil.list2String(this.videoIDS, "v")).append("'");
 		sb.append(" where imageid=").append(imageId);
 		String sql = sb.toString();
@@ -146,6 +152,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 			jsonObj.put("size", image.size);
 			jsonObj.put("style", image.style);
 			jsonObj.put("type", image.type);
+			jsonObj.put("situation", image.situation);
 			jsonObj.put("videoidS", StringUtil.list2String(image.videoIDS, "v"));
 		}catch(JSONException e){ }
 		return jsonObj;
@@ -160,6 +167,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
         	this.size = rs.getInt("size");
         	this.style = rs.getString("style");
         	this.type = rs.getString("type");
+        	this.situation = rs.getString("situation");
         	this.videoIDS = StringUtil.string2List(rs.getString("videoidS"), "v");
         	this.fileName = rs.getString("filename");
 		} catch (SQLException e) {
@@ -177,6 +185,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		image.size = this.size;
 		image.style = this.style;
 		image.type = this.style;
+		image.situation = this.situation;
 		image.videoIDS = this.videoIDS;
 		image.fileName = this.fileName;
 		return image;
