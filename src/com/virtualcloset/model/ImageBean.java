@@ -37,6 +37,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 	public String situation = "";		//  ∫œ≥°∫œ
 	public ArrayList<Integer> videoIDS;
 	public String fileName = "";
+	public String afterDeal = "";
 //	public String labels = "";
 	
 	private static DatabaseDao db= new DatabaseDao();
@@ -170,6 +171,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
         	this.situation = rs.getString("situation");
         	this.videoIDS = StringUtil.string2List(rs.getString("videoidS"), "v");
         	this.fileName = rs.getString("filename");
+        	this.afterDeal = rs.getString("afterdeal");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -188,6 +190,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		image.situation = this.situation;
 		image.videoIDS = this.videoIDS;
 		image.fileName = this.fileName;
+		image.afterDeal = this.afterDeal;
 		return image;
 	}
 }

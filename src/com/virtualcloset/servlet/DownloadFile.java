@@ -49,7 +49,7 @@ public class DownloadFile extends HttpServlet {
 			
 			image = image.query();
 			if(image != null){
-				fileName = DBConfig.imageLocation + "/" + image.fileName;
+				fileName = DBConfig.imageLocation + "/" + image.afterDeal;
 				System.out.println("DownloadFile  filename:::"+fileName);
 			}
 		} catch (JSONException e1) {
