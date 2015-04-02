@@ -31,12 +31,15 @@ public class DeleteData extends HttpServlet {
 		JSONObject messageJson = null;
 		try {
 			String requestJson = request.getParameter("requestJson");
+			System.out.println("DeleteData.java  requestJson="+requestJson);
 			JSONTokener token = new JSONTokener(requestJson);
 			JSONObject jobj = (JSONObject)token.nextValue();
 			
 			String deleteType = (String)request.getAttribute("deletetype");
+			System.out.println("DeleteData.java  deleteType="+deleteType);
 			if(deleteType.equals("deleteimage")){
 				messageJson = deleteImage(jobj);
+				System.out.println("DeleteData.java  messageJson="+messageJson);
 			}else{
 				
 			}
@@ -58,6 +61,7 @@ public class DeleteData extends HttpServlet {
 	private JSONObject deleteImage(JSONObject jobj) {
 		int message;
 		ImageBean image = new ImageBean(jobj);
+		System.out.println("DeleteData.java  imageId="+image.imageId);
 		image = image.query();
 		if(image != null){
 			int res = image.delete();
