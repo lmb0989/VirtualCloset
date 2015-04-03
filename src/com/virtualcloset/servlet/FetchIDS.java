@@ -36,7 +36,9 @@ public class FetchIDS extends HttpServlet {
 			if(idsType.equals("imageids")){
 				ImageBean image = new ImageBean(jobj);
 				for(ImageBean im : image.getUserAllImage()){
-					idsArray.put(im.imageId);
+					if(!im.afterDeal.isEmpty()){
+						idsArray.put(im.imageId);
+					}
 				}
 				jobj.put("message", 0);
 				jobj.put("image_ids", idsArray);

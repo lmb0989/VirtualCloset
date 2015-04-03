@@ -67,9 +67,10 @@ public class DeleteData extends HttpServlet {
 			int res = image.delete();
 			if(res > 0){
 				message = DELETE_MESSAGE_SUCCESS;
-				String fileName = image.fileName;
-				File file = new File(DBConfig.vedioLocation, fileName);
-				file.deleteOnExit();
+				File file = new File(DBConfig.imageLocation, image.fileName);
+				file.delete();
+				file = new File(DBConfig.imageLocation, image.afterDeal);
+				file.delete();
 			}else{
 				message = DELETE_MESSAGE_FAIL;
 			}
