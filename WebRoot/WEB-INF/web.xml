@@ -36,6 +36,11 @@
     <servlet-name>DeleteData</servlet-name>
     <servlet-class>com.virtualcloset.servlet.DeleteData</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>ModifyInfo</servlet-name>
+    <servlet-class>com.virtualcloset.servlet.ModifyInfo</servlet-class>
+  </servlet>
+
 
 
 
@@ -71,6 +76,10 @@
   <servlet-mapping>
     <servlet-name>DeleteData</servlet-name>
     <url-pattern>/deletedata</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ModifyInfo</servlet-name>
+    <url-pattern>/modifyInfo</url-pattern>
   </servlet-mapping>
   
   <welcome-file-list>

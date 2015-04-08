@@ -20,6 +20,8 @@ public class PostManager extends HttpServlet {
     private static final String POST_TYPE_FETCH_IMAGEINFO = "fetch_image_info";
     private static final String POST_TYPE_FETCH_VIDEOINFO = "fetch_video_info";
     
+    private static final String POST_TYPE_MODIFY_IMAGE = "modify_image";
+    
     private static final String POST_TYPE_DELETE_IMAGE = "delete_image";
     
 	private static final String POST_TYPE_UPLOAD_IMAGE = "upload_image";
@@ -47,41 +49,45 @@ public class PostManager extends HttpServlet {
 		
 		String path = null;
 		if(postType != null){
-			if(postType.equals(POST_TYPE_LOGIN)){
+			if(postType.equals(POST_TYPE_LOGIN)){	//登陆
 				path = "/login";
-			}else if(postType.equals(POST_TYPE_REGISTER)){
+			}else if(postType.equals(POST_TYPE_REGISTER)){	//注册
 				path = "/reg";
 				
-			}else if(postType.equals(POST_TYPE_FETCH_USERINFO)){
+			}else if(postType.equals(POST_TYPE_FETCH_USERINFO)){	//获取用户信息
 				path = "/fetchInfo";
 				request.setAttribute("infotype", "userinfo");
-			}else if(postType.equals(POST_TYPE_FETCH_IMAGEINFO)){
+			}else if(postType.equals(POST_TYPE_FETCH_IMAGEINFO)){	//获取图像信息
 				path = "/fetchInfo";
 				request.setAttribute("infotype", "imageinfo");
-			}else if(postType.equals(POST_TYPE_FETCH_VIDEOINFO)){
+			}else if(postType.equals(POST_TYPE_FETCH_VIDEOINFO)){		//获取视频信息
 				path = "/fetchInfo";
 				request.setAttribute("infotype", "videoinfo");
 				
-			}else if(postType.equals(POST_TYPE_FETCH_IMAGE_IDS)){
+			}else if(postType.equals(POST_TYPE_MODIFY_IMAGE)){		//修改图像信息
+				path = "/modifyInfo";
+				request.setAttribute("modifytype", "modifyimage");
+				
+			}else if(postType.equals(POST_TYPE_FETCH_IMAGE_IDS)){		//获取图像ID
 				path = "/fetchids";
 				request.setAttribute("idstype", "imageids");
-			}else if(postType.equals(POST_TYPE_FETCH_VEDIO_IDS)){
+			}else if(postType.equals(POST_TYPE_FETCH_VEDIO_IDS)){		//获取视频ID
 				path = "/fetchids";
 				request.setAttribute("idstype", "videoids");
 				
-			}else if(postType.equals(POST_TYPE_DELETE_IMAGE)){
+			}else if(postType.equals(POST_TYPE_DELETE_IMAGE)){			//删除图像
 				path = "/deletedata";
 				request.setAttribute("deletetype", "deleteimage");
-			}else if(postType.equals(POST_TYPE_UPLOAD_IMAGE)){
+			}else if(postType.equals(POST_TYPE_UPLOAD_IMAGE)){		//上传图像
 				path = "/uploadfile";
 				request.setAttribute("uploadtype", "uploadimage");
-			}else if(postType.equals(POST_TYPE_UPLOAD_FILE)){
+			}else if(postType.equals(POST_TYPE_UPLOAD_FILE)){			//上传文件
 				
 				
-			}else if(postType.equals(POST_TYPE_DOWNLOAD_IMAGE)){
+			}else if(postType.equals(POST_TYPE_DOWNLOAD_IMAGE)){		//下载图像
 				path = "/downloadfile";
 				request.setAttribute("downloadtype", "downloadimage");
-			}else{
+			}else{																						//下载视频
 				path = "/downloadfile";
 				request.setAttribute("downloadtype", "downloadvideo");
 			}

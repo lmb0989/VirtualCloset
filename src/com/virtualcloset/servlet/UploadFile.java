@@ -76,7 +76,7 @@ public class UploadFile extends HttpServlet {
                     OutputStream output = new FileOutputStream(new File(path,serverFileName));  
                     InputStream in = item.getInputStream();  
                       
-                    int length = 0;  
+                    int length = 0; 
                     byte[] buf = new byte[1024];
                     while((length = in.read(buf))!=-1){
                     	output.write(buf,0,length);

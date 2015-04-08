@@ -108,9 +108,9 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		return (List<ImageBean>)db.queryList(sql, new ImageBean());
 	}
 	
-	public void update(String key, String value) {
+	public int update(String key, String value) {
 		String sql = "update images set "+ key +"='"+ value +"' where imageid="+ imageId;
-		db.update(sql);
+		return db.update(sql);
 	}
 	
 	public void update() {
