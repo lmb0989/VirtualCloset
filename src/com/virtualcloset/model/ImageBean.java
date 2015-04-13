@@ -84,6 +84,7 @@ public class ImageBean implements PersistentObject, ObjectMapper {
 		sb.append(",'").append(this.situation).append("'");
 		sb.append(",'").append(StringUtil.list2String(videoIDS, "v")).append("'");
 		sb.append(",'").append(this.fileName).append("'");
+		sb.append(",'").append(this.afterDeal).append("'");
 		sb.append(")");
 		String sql = sb.toString();
 		int result = db.update(sql);
