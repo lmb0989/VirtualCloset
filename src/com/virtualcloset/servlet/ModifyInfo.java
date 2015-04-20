@@ -40,7 +40,13 @@ public class ModifyInfo extends HttpServlet {
         		result = image.update("situation", image.situation);
         		result = image.update("style", image.style);
         		result = image.update("type", image.type);
-        		out.print(image.createMessage(result>0 ? MODIFY_MESSAGE_SUCCESS : MODIFY_MESSAGE_FAIL));
+        		if(result>0){
+        			jobj = image.getImageInfo();
+        			jobj.put("message", MODIFY_MESSAGE_SUCCESS);
+        			out.print(jobj.toString());
+        		}else{
+        			out.print(image.createMessage(MODIFY_MESSAGE_FAIL));
+        		}
         	}else{
         		
         	}
